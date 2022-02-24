@@ -7,6 +7,10 @@ from django.dispatch import receiver
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
 
+class UserTypes(models.TextChoices):
+    CUSTOMER = 'C', _('Customer')
+    TECHNICIAN = 'T', _('Technician')
+    STAFF = 'S', _('Staff')
 
 class User(AbstractUser):
     phone = models.CharField(max_length=25)
@@ -16,12 +20,16 @@ class User(AbstractUser):
     state = models.CharField(max_length=2)
     zip = models.CharField(max_length=15)
     comments = models.TextField(blank=True, null=True)
+    type = models.TextField(max_length=10,choices=UserTypes.choices, default='T')
+    email = models.EmailField(_('Email Address'), blank=False)
+    first_name = models.CharField('First Name', blank=False, max_length=25)
+    last_name = models.CharField(_('Last Name'), blank=False, max_length=25)
 
     def is_customer(self):
-        return User.objects.filter(pk=self.id, groups__name='Customer').exists()
+        return User.type == UserTypes.CUSTOMER
 
     def is_tech(self):
-        return User.objects.filter(pk=self.id, groups__name='Technician').exists()
+        return User.type == UserTypes.TECHNICIAN
 
 
 class JobStatus(models.TextChoices):
@@ -72,7 +80,7 @@ class PayRate(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        if User.objects.filter(pk=instance.id, groups__name='Technician').exists():
+        if User.is_tech():
             Technician.objects.create(user=instance)
 
 class WorkingDay(models.Model):
