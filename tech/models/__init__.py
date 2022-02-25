@@ -4,8 +4,7 @@ from .user import *
 from .technician import *
 from .workingday import *
 from .skill import *
-from .clientschedule import *
 from .part import *
-from .jobparts import *
-from .jobtime import *
 from .job import *
+from .jobpart import *
+from .jobtime import *

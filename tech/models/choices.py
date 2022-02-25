@@ -16,16 +16,17 @@ class JobStatus(models.TextChoices):
 
 
 class PartStatus(models.TextChoices):
+    UNKNOWN = 'X', 'Unknown'
     WAREHOUSE = 'W', 'At the warehouse'
     UNAVAILABLE = 'U', 'Not Available'
     DISCONTINUED = 'D', 'Discontinued'
-    ORDER = 'O', 'Order'
+    ORDER = 'O', 'Ordered'
 
 
 class JobLevel(models.TextChoices):
-    LOW = 'L', 'Low Urgency'
-    NORMAL = 'N', 'Normal Urgency'
-    CRITICAL = 'C', 'Critical Urgency'
+    LOW = 'L', 'Low'
+    NORMAL = 'N', 'Normal'
+    CRITICAL = 'C', 'Critical'
 
 
 class PartLocation(models.TextChoices):

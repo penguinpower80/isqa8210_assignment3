@@ -1,5 +1,6 @@
 from django.db import models
 
+from tech.helpers.helpers import getDateTimeFormat
 from tech.models.choices import JobStatus, JobLevel
 from tech.models.technician import Technician
 from tech.models.user import User
@@ -18,13 +19,14 @@ class Job(models.Model):
         choices=JobLevel.choices,
         default=JobLevel.NORMAL
     )
-    requestor = models.CharField(max_length=80)
-    street1 = models.CharField(max_length=80)
-    street2 = models.CharField(max_length=80, blank=True, null=True)
-    city = models.CharField(max_length=80)
-    state = models.CharField(max_length=2)
-    zip = models.CharField(max_length=15)
-    description = models.TextField()
-    customer_comment = models.TextField(blank=True, null=True)
-    dispatch_comment = models.TextField(blank=True, null=True)
-    appointment = models.DateTimeField(),
+    description = models.TextField(help_text="Describe what the problem is.")
+    appointment = models.DateTimeField(null=True, blank=True)
+
+    def fmtAppt(self):
+        if (self.appointment):
+            return self.appointment.strftime(getDateTimeFormat())
+        else:
+            return ''
+
+    def __str__(self):
+        return "Job " + str(self.id)

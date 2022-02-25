@@ -16,4 +16,6 @@ class TechnicianAdmin(admin.ModelAdmin):
             return obj.user.username
 
     list_display = ("name","ulink")
+
+
 admin.site.register(Technician, TechnicianAdmin)

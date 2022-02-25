@@ -14,6 +14,11 @@ class Technician(models.Model):
     level = models.ForeignKey(PayRate, on_delete=models.CASCADE, verbose_name = "Experience Level",  null=True)
     skills = models.ManyToManyField(Skill, verbose_name="Technician Skills")
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name="Related System User")
+
+    class Meta:
+        verbose_name = "Extra Tech Info"
+        verbose_name_plural = "Extra Tech Info"
+
     def __str__(self):
         if self.user.first_name:
             return '{}'.format(self.user.get_full_name())

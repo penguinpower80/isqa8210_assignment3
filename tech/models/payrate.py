@@ -11,3 +11,7 @@ class PayRate(models.Model):
 
     def __str__(self):
         return '{}'.format(self.level)
+
+    class Meta:
+        verbose_name = "Pay Rate"
+        verbose_name_plural = "Pay Rates"

@@ -7,9 +7,16 @@ def tech_get_app_list(self, request):
     registered in this site.
     """
     ordering = {
-        "Users": 1,
-        "Technicians": 2,
-        "Pay rates": 3
+        "Jobs": 0,
+        "Job parts": 1,
+        "Tech schedules": 2,
+        "Job times": 3,
+        "Users": 4,
+        "Extra Tech Info": 5,
+        "Parts": 6,
+        "Pay Rates": 7,
+        "Skills": 8,
+
     }
     app_dict = self._build_app_dict(request)
     # a.sort(key=lambda x: b.index(x[0]))
