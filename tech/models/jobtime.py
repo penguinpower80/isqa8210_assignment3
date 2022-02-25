@@ -1,5 +1,8 @@
+import logging
+
 from django.db import models
 
+from tech.helpers.helpers import timeWorked
 from tech.models.job import Job
 from tech.models.technician import Technician
 
@@ -11,17 +14,9 @@ class JobTime(models.Model):
     end = models.DateTimeField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        total_diff = self.end - self.start
-        days = total_diff.days
-        hours, leftover = divmod(days.seconds, 3600)
-        minutes, seconds = divmod(leftover, 60)
-        time_string = []
-        if days > 0:
-            time_string.append( days + ' day(s)')
-        if hours > 0:
-            time_string.append( hours + ' hour(s)')
-        if minutes > 0:
-            time_string.append( minutes + ' minute(s)')
+    def totalTimeWorked(self):
+        return self.end - self.start
 
-        return ", " . join(time_string)
+    def __str__(self):
+        total_diff = self.totalTimeWorked()
+        return timeWorked(total_diff.seconds)
