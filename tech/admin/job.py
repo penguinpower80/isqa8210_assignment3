@@ -35,6 +35,9 @@ class JobAdmin(admin.ModelAdmin):
     def customer(self):
         return self.customer.get_full_name()
 
+    def technician_name(self, obj):
+        return obj.technician.user.get_full_name()
+
     def appt(self, obj):
         return obj.fmtAppt()
 
@@ -64,7 +67,7 @@ class JobAdmin(admin.ModelAdmin):
 
     time.short_description = "Total Time Worked"
 
-    list_display = ("customer_name", "status", "level", "appt", "parts", "time")
+    list_display = ("customer_name", "technician_name", "status", "level", "appt", "parts", "time")
 
 
 admin.site.register(Job, JobAdmin)

@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import admin
 from django.utils.safestring import SafeString
 
@@ -15,7 +17,13 @@ class TechnicianAdmin(admin.ModelAdmin):
         else:
             return obj.user.username
 
-    list_display = ("name","ulink")
+    def tskills(self,obj):
+        return ", ".join( skill.name for skill in obj.skills.all() )
+
+    def tdays(self,obj):
+        return ", ".join( day.day for day in obj.days.all() )
+
+    list_display = ("name","ulink", "tskills", "tdays")
 
 
 admin.site.register(Technician, TechnicianAdmin)

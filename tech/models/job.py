@@ -1,5 +1,7 @@
+import calendar
 import logging
 
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from tech.helpers.helpers import getDateTimeFormat
@@ -23,6 +25,13 @@ class Job(models.Model):
     )
     description = models.TextField(help_text="Describe what the problem is.")
     appointment = models.DateTimeField(null=True, blank=True)
+
+    def clean(self):
+        if self.appointment and self.technician:
+            dow = calendar.day_name[ self.appointment.weekday()]
+            hasDay = self.technician.days.filter(day = dow).count() > 0
+            if not hasDay:
+                raise ValidationError("Tech doesn't work this day!")
 
     def fmtAppt(self):
         if self.appointment:
