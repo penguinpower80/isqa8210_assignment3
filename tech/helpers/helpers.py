@@ -8,7 +8,7 @@ def getDateFormat():
 Return a time format string
 '''
 def getTimeFormat():
-    return "%-I:%M %p"
+    return "%#I:%M %p"
 
 '''
 Return a date time format string

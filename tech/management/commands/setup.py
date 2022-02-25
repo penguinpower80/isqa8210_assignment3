@@ -34,6 +34,7 @@ class Command(BaseCommand):
         call_command("makemigrations", interactive=False)
         call_command("migrate", interactive=False)
         call_command("initial_entities")
+        call_command("seeddb")
         self.stdout.write('Creating superuser')
         call_command("createsuperuser")
         self.stdout.write('Setup complete.')

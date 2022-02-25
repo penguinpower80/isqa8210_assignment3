@@ -10,9 +10,9 @@ from tech.models.workingday import WorkingDay
 
 
 class Technician(models.Model):
-    days = models.ManyToManyField(WorkingDay, verbose_name = "Working Days")
+    days = models.ManyToManyField(WorkingDay, verbose_name = "Working Days", blank=True)
     level = models.ForeignKey(PayRate, on_delete=models.CASCADE, verbose_name = "Experience Level",  null=True)
-    skills = models.ManyToManyField(Skill, verbose_name="Technician Skills")
+    skills = models.ManyToManyField(Skill, verbose_name="Technician Skills", blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name="Related System User")
 
     class Meta:

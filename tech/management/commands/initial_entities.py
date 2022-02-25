@@ -18,25 +18,27 @@ class Command(BaseCommand):
 
 
     def handle(self, *args, **options):
-        # self.stdout.write('Adding days of week...')
-        # WorkingDay.objects.create(day='Monday')
-        # WorkingDay.objects.create(day='Tuesday')
-        # WorkingDay.objects.create(day='Wednesday')
-        # WorkingDay.objects.create(day='Thursday')
-        # WorkingDay.objects.create(day='Friday')
-        # WorkingDay.objects.create(day='Saturday')
-        # WorkingDay.objects.create(day='Sunday')
-        #
-        # self.stdout.write('Adding initial payrate level')
-        # PayRate.objects.create(level='Entry', payrate='15.00')
-        #
-        # self.stdout.write('Adding initial skill')
-        # Skill.objects.create(name='Windows')
-        # Skill.objects.create(name='Mac')
-        # Skill.objects.create(name='Linux')
-        # Skill.objects.create(name='Servers')
-        # Skill.objects.create(name='Printers')
-        # Skill.objects.create(name='Networking')
+        self.stdout.write('Adding days of week...')
+        WorkingDay.objects.create(day='Monday')
+        WorkingDay.objects.create(day='Tuesday')
+        WorkingDay.objects.create(day='Wednesday')
+        WorkingDay.objects.create(day='Thursday')
+        WorkingDay.objects.create(day='Friday')
+        WorkingDay.objects.create(day='Saturday')
+        WorkingDay.objects.create(day='Sunday')
+
+        self.stdout.write('Adding initial payrate level')
+        PayRate.objects.create(level='Junior', payrate='15.00')
+        PayRate.objects.create(level='Middle', payrate='25.00')
+        PayRate.objects.create(level='Senior', payrate='55.00')
+
+        self.stdout.write('Adding initial skill')
+        Skill.objects.create(name='Windows')
+        Skill.objects.create(name='Mac')
+        Skill.objects.create(name='Linux')
+        Skill.objects.create(name='Servers')
+        Skill.objects.create(name='Printers')
+        Skill.objects.create(name='Networking')
 
         self.stdout.write('Adding Parts')
         self.add_dummy_part("Old Mouse", "oscar-ivan-esquivel-arteaga-ZtxED1cpB1E-unsplash.jpg", 14.99, PartStatus.DISCONTINUED)

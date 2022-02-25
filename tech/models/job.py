@@ -1,3 +1,5 @@
+import logging
+
 from django.db import models
 
 from tech.helpers.helpers import getDateTimeFormat
@@ -23,7 +25,7 @@ class Job(models.Model):
     appointment = models.DateTimeField(null=True, blank=True)
 
     def fmtAppt(self):
-        if (self.appointment):
+        if self.appointment:
             return self.appointment.strftime(getDateTimeFormat())
         else:
             return ''
