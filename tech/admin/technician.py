@@ -8,22 +8,27 @@ from tech.models import Technician
 
 class TechnicianAdmin(admin.ModelAdmin):
     def ulink(self, obj):
-            return SafeString('<a href="../user/{}/change/">User Account</a>'.format(obj.user.id) )
+        return SafeString('<a href="../user/{}/change/">User Account</a>'.format(obj.user.id))
 
     ulink.short_description = "Profile"
-    def name(self,obj):
+
+    def name(self, obj):
         if obj.user.first_name:
             return obj.user.first_name + ' ' + obj.user.last_name
         else:
             return obj.user.username
 
-    def tskills(self,obj):
-        return ", ".join( skill.name for skill in obj.skills.all() )
+    def tskills(self, obj):
+        return ", ".join(skill.name for skill in obj.skills.all())
 
-    def tdays(self,obj):
-        return ", ".join( day.day for day in obj.days.all() )
+    tskills.short_description = "Technician's Skills"
 
-    list_display = ("name","ulink", "tskills", "tdays")
+    def tdays(self, obj):
+        return ", ".join(day.day for day in obj.days.all())
+
+    tdays.short_description = "Days Tech Works"
+
+    list_display = ("name", "ulink", "tskills", "tdays")
 
 
 admin.site.register(Technician, TechnicianAdmin)
