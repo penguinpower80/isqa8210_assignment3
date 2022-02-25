@@ -84,11 +84,11 @@ if config('DB', default='SQLITE') == 'MYSQL':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'django',
-            'USER': 'root',
-            'PASSWORD': 'root',
-            'HOST': '127.0.0.1',
-            'PORT': '10005'
+            'NAME': config('DB_NAME', default='django'),
+            'USER': config('DB_USER', default=''),
+            'PASSWORD': config('DB_PASSWORD', default=''),
+            'HOST': config('DB_HOST', default='127.0.0.1'),
+            'PORT': config('DB_PORT', default='3306')
         }
     }
 else:
