@@ -12,9 +12,11 @@ class JobPartInline(admin.TabularInline):
     model = JobPart
     extra = 1
 
+
 class JobTimeInline(admin.StackedInline):
     model = JobTime
     extra = 1
+
 
 class JobAdmin(admin.ModelAdmin):
     inlines = [
@@ -29,6 +31,7 @@ class JobAdmin(admin.ModelAdmin):
         ("customer_name", RelatedDropdownFilter),
     )
     search_fields = ("description__icontains",)
+
     def customer(self):
         return self.customer.get_full_name()
 
@@ -36,8 +39,9 @@ class JobAdmin(admin.ModelAdmin):
         return obj.fmtAppt()
 
     def parts(self, obj):
-        parts = JobPart.objects.filter(job_id = obj.id).filter( Q(status=PartLocation.PENDING) | Q(status=PartLocation.ORDERED)).all()
-        return str( len(parts) )
+        parts = JobPart.objects.filter(job_id=obj.id).filter(
+            Q(status=PartLocation.PENDING) | Q(status=PartLocation.ORDERED)).all()
+        return str(len(parts))
 
     def customer_name(self, obj):
         return obj.customer.get_full_name()
@@ -49,19 +53,18 @@ class JobAdmin(admin.ModelAdmin):
         ("customer", RelatedDropdownFilter),
     )
 
-    parts.short_description="Pending or Ordered Parts"
+    parts.short_description = "Pending or Ordered Parts"
 
     def time(self, obj):
-        times = JobTime.objects.filter(job_id = obj.id).all()
+        times = JobTime.objects.filter(job_id=obj.id).all()
         total_seconds = 0
         for time in times:
             total_seconds += time.totalTimeWorked().seconds
         return timeWorked(total_seconds)
 
-    time.short_description="Total Time Worked"
+    time.short_description = "Total Time Worked"
 
     list_display = ("customer_name", "status", "level", "appt", "parts", "time")
 
 
 admin.site.register(Job, JobAdmin)
-

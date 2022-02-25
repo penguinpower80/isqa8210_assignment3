@@ -2,6 +2,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.utils.safestring import SafeString
+from django_admin_listfilter_dropdown.filters import DropdownFilter, RelatedDropdownFilter
 
 from tech.models import User
 
@@ -14,6 +15,12 @@ class UserAdmin(BaseUserAdmin):
             return 'Customer'
         return '-'
     utype.short_description = "USER TYPE"
+
+    list_filter = (
+        "is_active",
+        "type",
+
+    )
 
 
     list_display = ("username", "email", "first_name", "last_name", "utype",)
