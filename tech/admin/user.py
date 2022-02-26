@@ -48,7 +48,7 @@ class UserAdmin(BaseUserAdmin):
         }),
         ['Advanced options', {
             'classes': ('collapse',),
-            'fields': ('last_login',),
+            'fields': ('last_login','is_superuser', 'is_staff',),
         }]
     ]
     add_fieldsets = [
@@ -76,7 +76,7 @@ class UserAdmin(BaseUserAdmin):
         }),
         ['Advanced options', {
             'classes': ('collapse',),
-            'fields': ('last_login',),
+            'fields': ('last_login','is_superuser', 'is_staff',),
         }]
     ]
 
