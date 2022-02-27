@@ -15,6 +15,8 @@ import django_heroku
 from decouple import config
 from pathlib import Path
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,7 +45,8 @@ INSTALLED_APPS = [
     'tech.apps.TechConfig',
     'django_seed',
     'django_admin_listfilter_dropdown',
-    'storages'
+    'storages',
+    'widget_tweaks'
 ]
 
 MIDDLEWARE = [
@@ -77,6 +80,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tracker.wsgi.application'
 
+
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = '/'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -140,9 +146,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 
