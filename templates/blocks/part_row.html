@@ -1,0 +1,26 @@
+<div class="box" id="jobpart_{{ jobpart.id  }}">
+    <article class="media">
+        <figure class="media-left">
+            <p class="image is-64x64">
+                <img class="is-rounded" src="{{ part.image.url }}">
+            </p>
+        </figure>
+        <div class="media-content">
+            <div class="content">
+                <p>
+                    <strong>{{ part.name }}</strong>
+                    <br>
+                    ${{ jobpart.cost|floatformat:2 }}
+                    {% if part.status %}
+                        <div>
+                            <strong>Status:</strong> {{ part.get_status_display }}
+                        </div>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="media-right">
+            <button class="delete partremove" data-jobpartid={{ jobpart.id }} data-partid="{{ part.id }}" data-jobid="{{ jobpart.job.id }}"></button>
+        </div>
+    </article>
+</div>

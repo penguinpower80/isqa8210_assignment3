@@ -17,6 +17,12 @@ class User(AbstractUser):
     first_name = models.CharField('First Name', blank=False, max_length=25)
     last_name = models.CharField('Last Name', blank=False, max_length=25)
 
+    def name(self):
+        if self.first_name:
+            return self.first_name + ' ' + self.last_name
+        else:
+            return self.username
+
     def is_customer(self):
         return self.type == UserTypes.CUSTOMER
 

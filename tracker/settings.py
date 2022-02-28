@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django_seed',
     'django_admin_listfilter_dropdown',
     'storages',
-    'widget_tweaks'
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -102,7 +102,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': BASE_DIR / config('DB_NAME', default='db.sqlite3'),
         },
     }
 

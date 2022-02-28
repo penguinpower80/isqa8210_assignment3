@@ -15,9 +15,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--mode', type=str, help="Mode")
 
-
-
-    def handle(self, *args, **options):
+    def loadDays(self):
         self.stdout.write('Adding days of week...')
         WorkingDay.objects.create(day='Monday')
         WorkingDay.objects.create(day='Tuesday')
@@ -27,11 +25,13 @@ class Command(BaseCommand):
         WorkingDay.objects.create(day='Saturday')
         WorkingDay.objects.create(day='Sunday')
 
+    def loadRates(self):
         self.stdout.write('Adding initial payrate level')
         PayRate.objects.create(level='Junior', payrate='15.00')
         PayRate.objects.create(level='Middle', payrate='25.00')
         PayRate.objects.create(level='Senior', payrate='55.00')
 
+    def loadSkills(self):
         self.stdout.write('Adding initial skill')
         Skill.objects.create(name='Windows')
         Skill.objects.create(name='Mac')
@@ -40,12 +40,33 @@ class Command(BaseCommand):
         Skill.objects.create(name='Printers')
         Skill.objects.create(name='Networking')
 
+    def loadParts(self):
         self.stdout.write('Adding Parts')
         self.add_dummy_part("Old Mouse", "oscar-ivan-esquivel-arteaga-ZtxED1cpB1E-unsplash.jpg", 14.99, PartStatus.DISCONTINUED)
         self.add_dummy_part("1TB Harddrive", "nick-van-der-ende-VYfxkePredI-unsplash.jpg", 100, PartStatus.WAREHOUSE)
         self.add_dummy_part("Keyboard", "martin-garrido-cVUPic1cbd4-unsplash.jpg", 25.99, PartStatus.WAREHOUSE)
         self.add_dummy_part("Laptop", "erick-cerritos-i5UV2HpITYA-unsplash.jpg", 1250, PartStatus.UNAVAILABLE, 14)
         self.add_dummy_part("Computer", "luke-hodde-Z-UuXG6iaA8-unsplash.jpg", 730, PartStatus.ORDER)
+
+    def handle(self, *args, **options):
+        should_continue = input('Load Days? [y/N]?')
+        if should_continue.lower() == 'y':
+            self.loadDays()
+
+        should_continue = input('Load Rates? [y/N]?')
+        if should_continue.lower() == 'y':
+            self.loadRates()
+
+        should_continue = input('Load Skills? [y/N]?')
+        if should_continue.lower() == 'y':
+            self.loadSkills()
+
+        should_continue = input('Load Parts? [y/N]?')
+        if should_continue.lower() == 'y':
+            self.loadParts()
+
+
+
 
         self.stdout.write('Done setting up entities')
 

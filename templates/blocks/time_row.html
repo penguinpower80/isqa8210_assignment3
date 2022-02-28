@@ -1,0 +1,25 @@
+{% load techtags %}
+<div class="card is-bordered" id="time_{{ time.id }}">
+    <header class="card-header has-background-grey-lighter">
+        <p class="card-header-title">
+            {{ time.start }} - {{ time.end }}
+        </p>
+        <p class="card-header-title">
+            <span class="has-text-grey">{% timeworked start=time.start end=time.end %}</span>
+        </p>
+    </header>
+    {% if time.comment %}
+        <div class="card-content">
+            <div class="content">
+                {{ time.comment }}
+            </div>
+        </div>
+    {% endif %}
+    <footer class="card-footer">
+        <div class="card-footer-item">
+            <strong>Tech: </strong>&nbsp;&nbsp;<span>{{ time.technician.user.name }}</span>
+        </div>
+        <a href="#" class="card-footer-item addtimecomment" data-jobid="{{ time.job_id }}" data-timeid="{{ time.id }}">Comment</a>
+        <a href="#" class="card-footer-item timeremove" data-jobid="{{ time.job_id }}" data-timeid="{{ time.id }}">Delete</a>
+    </footer>
+</div>

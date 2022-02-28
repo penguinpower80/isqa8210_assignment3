@@ -1,0 +1,17 @@
+{% load techtags %}
+<div class="card mt-2 mb-2">
+    <button class="button is-primary is-fullwidth" id="togglepartslist">
+        <span class="icon">
+            <i class="fas fa-caret-{% if visible %}down{% else %}right{% endif %}"></i>
+        </span>
+        <span class="list_visiblity_label">
+            {% if visible %}Hide{% else %}Show{% endif %} Available Parts
+        </span>
+    </button>
+    <div id="parts_list" style="display:{% if not visible %}none{% endif %}">
+        {% partslist jobid %}
+    </div>
+
+
+
+</div>

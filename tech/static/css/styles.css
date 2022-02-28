@@ -1,3 +1,7 @@
+html, body {
+    height: 100%
+}
+
 .skiptocontent {
     padding: 8px;
     position: absolute;
@@ -11,4 +15,13 @@
 
 img.desktop-logo {
     width: 150px;
+}
+
+.add_part_holder {
+    max-height: 50%;
+    overflow: auto;
+}
+
+.quickview-block {
+    overflow:hidden;
 }

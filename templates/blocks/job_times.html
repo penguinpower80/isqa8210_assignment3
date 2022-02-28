@@ -1,0 +1,6 @@
+<div class="container">
+    {% include 'blocks/quickview_customer.html' %}
+    {% for time in timesCollection %}
+        {% include 'blocks/time_row.html' with time=time  %}
+    {% endfor %}
+</div>

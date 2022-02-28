@@ -4,11 +4,10 @@
 {% endfor %}
 
 
-{% if form.errors %}
+{% if form.errors and field.errors %}
     <div class="non_field_form_error notification is-danger">
     <ul>
         {% for field in form %}
-
             {% for error in field.errors %}
                 <li><strong>{{ error|escape }}</strong></li>
             {% endfor %}

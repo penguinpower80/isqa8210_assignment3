@@ -1,81 +1,72 @@
-<div class="card block">
+{% load techtags %}
+<div id="job_{{ job.id }}" class="card block status_{{ job.status.lower }} level_{{ job.level.lower }}">
     <header class="card-header has-background-link has-text-white">
         <div class="column">
             <p class="card-header-title has-text-white">
-                Imma Customer
+                {{ job.customer.name }} ({{ job.customer.username }})
             </p>
         </div>
         <div class="column has-text-right">
-            <p class="has-text-right" title="Submited 1/1/2002">XXX days old</p>
+
+            <p class="has-text-right" title="{{ job.created_at }}">Submitted {% jobage job.created_at %}</p>
         </div>
     </header>
     <div class="card-content">
         <div class="content">
-            <div class="tag is-primary is-light is-large">
-                <span class="icon">
-                    <i class="fas fa-calendar"></i>
-                </span>
-                <span>
-                    <span class="is-hidden-mobile">
-                        Appointment:
-                    </span>
-                    10/27/33 @ 3:15pm
-                    <span class="is-hidden-mobile">
-                        (in xxx minutes)
-                    </span>
-                </span>
-            </div>
+            {% appt job.appointment %}
         </div>
         <div class="content">
-            Lorem ipsum leo risus, porta ac consectetur ac, vestibulum at eros. Donec id elit non mi porta gravida
-            at eget metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-            Cras mattis consectetur purus sit amet fermentum.
-            <div class="columns box">
-                <div class="column has-text-centered">
-                    <button class="button is-info">
+            {{ job.description }}
+            <div class="box">
+                <div class="columns">
+                    <div class="column has-text-centered">
+                        <button class="button is-info is-fullwidth" data-show="quickview" data-target="quickviewParts"
+                                data-type="parts" data-jobid="{{ job.id }}">
                         <span class="icon">
                         <i class="fas fa-laptop-medical"></i>
                             </span>
-                        <span>
+                            <span>
                         Parts
                         </span>
-                    </button>
-                </div>
-                <div class="column column has-text-centered">
-                    <button class="button is-primary">
+                        </button>
+                    </div>
+                    <div class="column has-text-centered">
+                        <button class="button is-primary is-fullwidth" data-show="quickview" data-target="quickviewTime"
+                                data-type='times' data-jobid="{{ job.id }}">
                             <span class="icon">
                         <i class="fas fa-stopwatch"></i>
                             </span>
-                        <span>
+                            <span>
                         View Time
                             </span>
-                    </button>
-                </div>
-                <div class="column">
-                    <button class="button is-success">
+                        </button>
+                    </div>
+                    <div class="column has-text-centered">
+                        <button class="button is-success is-fullwidth togglejobtimer" data-active="0" data-job="{{ job.id }}">
                         <span class="icon">
-                    <i class="fas fa-stopwatch"></i>
-                </span>
-                        <span>
+                            <i class="fas fa-play"></i>
+                            </span>
+                            <span>
                         Start Time
                             </span>
-                    </button>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <footer class="card-footer">
         <div class="card-footer-item">
-            <span class="tag is-danger">High</span>
-            <span class="tag is-warning">Medium</span>
-            <span class="tag is-primary">Normal</span>
+            {% level_picker job.level job.id %}
         </div>
         <div class="card-footer-item">
-            Billable:
+            {% status_picker job.status job.id %}
+        </div>
+        <div class="card-footer-item">
             $125.00
         </div>
         <div class="card-footer-item">
-            Assigned to: Johnny Tech
+            Assigned to: {{ job.technician.user.name }}
         </div>
     </footer>
 </div>

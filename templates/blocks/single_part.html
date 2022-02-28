@@ -1,0 +1,37 @@
+<article class="media p-3">
+  <figure class="media-left">
+    <div class="image is-128x128">
+        <div style='background-image: url({{ part.image.url }});width: 128px;height: 128px;background-position: center center;background-size: cover;background-repeat: no-repeat;border-radius: 50%;'></div>
+    </div>
+  </figure>
+  <div class="media-content">
+    <div class="content">
+      <p>
+        <strong>{{ part.name }}</strong>
+        <br>
+        ${{ part.cost|floatformat:2 }}
+        {% if part.status  %}
+            <div>
+            <strong>Status:</strong> {{ part.get_status_display }}
+            </div>
+        {% endif %}
+          {% if part.leadtime %}
+              <div>
+            <strong>Lead time:</strong> {{ part.leadtime }}
+              </div>
+          {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="media-right">
+    <button class="button is-primary is-fullwidth partadd" data-jobid="{{ jobid }}" data-partid="{{ part.id }}">
+        <span class="icon">
+            <i class="fas fa-plus"></i>
+        </span>
+        <span>
+            Add Part
+        </span>
+    </button>
+  </div>
+</article>

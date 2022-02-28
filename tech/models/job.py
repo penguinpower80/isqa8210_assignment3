@@ -25,6 +25,8 @@ class Job(models.Model):
     )
     description = models.TextField(help_text="Describe what the problem is.")
     appointment = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def clean(self):
         if self.appointment and self.technician:

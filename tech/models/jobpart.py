@@ -12,6 +12,7 @@ class JobPart(models.Model):
         choices=PartLocation.choices,
         default=PartLocation.PENDING
     )
+    cost = models.FloatField( models.FloatField("Cost $") )
 
     def has_module_permission(self, request):
         return False
