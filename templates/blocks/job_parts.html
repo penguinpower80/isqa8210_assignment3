@@ -9,6 +9,7 @@
             </div>
         </div>
         {% include 'blocks/parts_selector.html' with visible=True jobid=jobid %}
+        <div id="jobparts"></div>
     {% else %}
         {% include 'blocks/parts_selector.html' with visible=False jobid=jobid %}
         <div id="jobparts">

@@ -1,7 +1,7 @@
 <article class="media p-3">
   <figure class="media-left">
     <div class="image is-128x128">
-        <div style='background-image: url({{ part.image.url }});width: 128px;height: 128px;background-position: center center;background-size: cover;background-repeat: no-repeat;border-radius: 50%;'></div>
+        <div style='background-image: url({% if part.image %}{{ part.image.url }}{% endif %});width: 128px;height: 128px;background-position: center center;background-size: cover;background-repeat: no-repeat;border-radius: 50%;'></div>
     </div>
   </figure>
   <div class="media-content">

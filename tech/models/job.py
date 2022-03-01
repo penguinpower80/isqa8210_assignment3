@@ -3,6 +3,7 @@ import logging
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Sum
 
 from tech.helpers.helpers import getDateTimeFormat
 from tech.models.choices import JobStatus, JobLevel
@@ -40,6 +41,14 @@ class Job(models.Model):
             return self.appointment.strftime(getDateTimeFormat())
         else:
             return ''
+
+    def totalCost(self):
+        # Hours cost
+        # parts cost
+        partscost = self.jobpart_set.aggregate(Sum('cost'))
+        for t in self.jobtime_set.all():
+            logging.warning(t.start)
+        return 123;
 
     def __str__(self):
         return "Job " + str(self.id)

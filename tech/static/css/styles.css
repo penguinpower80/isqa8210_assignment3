@@ -25,3 +25,63 @@ img.desktop-logo {
 .quickview-block {
     overflow:hidden;
 }
+
+.navbar {
+    background-image:none;
+    border:none;
+}
+
+.jobcard.level_l, .jobcard.level_l .box {
+
+}
+
+.jobcard.level_n, .jobcard.level_n .box {
+    background-color: rgba(225, 255, 192, 0.39);
+}
+
+.jobcard.level_c, .jobcard.level_c .box {
+    background-color: rgba(255, 229, 231, 0.39);
+}
+
+.statusflag {
+    position: absolute;
+    right: 0;
+    border: 1px solid black;
+    border-right: none;
+    padding: 2px 10px 2px 7px;
+    text-align: left;
+    margin-top: -15px;
+}
+
+.jobcard.status_n .statusflag {
+    background-color: blue;
+    border-color:blue;
+    color: white;
+}
+
+.jobcard.status_o .statusflag {
+    background-color: green;
+    border-color:green;
+    color: white;
+}
+
+.jobcard.status_x {
+    opacity: 0.65;
+}
+
+.jobcard.status_x .statusflag{
+    background-color: black;
+    color: white;
+
+}
+.jobcard.status_h .statusflag, .jobcard.status_w .statusflag {
+    background-color: orange;
+    color:white;
+    border-color:orangered;
+}
+
+.jobcard.status_c .statusflag {
+    background-color: purple;
+    color:white;
+    border-color:mediumpurple;
+}

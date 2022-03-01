@@ -2,7 +2,9 @@
     <article class="media">
         <figure class="media-left">
             <p class="image is-64x64">
+                {% if part.image %}
                 <img class="is-rounded" src="{{ part.image.url }}">
+                {% endif %}
             </p>
         </figure>
         <div class="media-content">

@@ -139,8 +139,34 @@ def addtimecomment(request, jobid, timeid):
         return HttpResponse(status=401)
 
     text = request.POST.get("text", "")
-
-
     time.comment = text
     time.save()
     return HttpResponse(status=200)
+
+'''
+Updates various elements of the job
+'''
+def updatejob(request, jobid):
+    job = get_object_or_404(Job, pk=jobid)
+    if not canAccess(request.user, job):
+        return HttpResponse(status=401)
+
+    element = request.POST.get("element")
+    value = request.POST.get("value")
+
+    if element and value:
+        if element=='status':
+            job.status = value
+        if element=='level':
+            job.level = value
+
+
+
+    return render(request, 'blocks/job_row.html', {
+        'job': job,
+    })
+
+    return HttpResponse(status=500, content="GOOD")
+
+def getjobcost(request, jobid):
+    pass

@@ -15,5 +15,7 @@ urlpatterns = [
           path('ajax/stoptime/<int:jobid>', views.ajax.stoptime, name='stoptime'),
           path('ajax/removetime/<int:jobid>/<int:timeid>', views.ajax.removetime, name='removetime'),
           path('ajax/addtimecomment/<int:jobid>/<int:timeid>', views.ajax.addtimecomment, name='addtimecomment'),
+          path('ajax/updatejob/<int:jobid>', views.ajax.updatejob, name='updatejob'),
+          path('ajax/getjobcost/<int:jobid>', views.ajax.getjobcost, name='jobcost'),
 
 ]

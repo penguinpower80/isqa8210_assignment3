@@ -77,7 +77,7 @@ def timeworked(start, end):
 
 @register.simple_tag
 def status_picker(status, jobid):
-    s='<select class="select" id="jobstatus_' + str(jobid) +'">'
+    s='<select class="select jobstatusselector" data-id="'+ str(jobid) +'">'
     for choice in JobStatus.choices:
         selected = 'selected="SELECTED"' if status==choice[0] else ''
         s+="<option {} value='{}'>{}</option>".format(selected, choice[0], choice[1])
@@ -86,7 +86,7 @@ def status_picker(status, jobid):
 
 @register.simple_tag
 def level_picker(level, jobid):
-    s='<select class="select" id="joblevel_' + str(jobid) +'">'
+    s='<select class="select joblevelselector" data-id="' + str(jobid) +'">'
     for choice in JobLevel.choices:
         selected = 'selected="SELECTED"' if level==choice[0] else ''
         s+="<option {} value='{}'>{}</option>".format(selected, choice[0], choice[1])

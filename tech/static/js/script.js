@@ -53,6 +53,24 @@ async function timeMessage(jobid, timeid) {
     }
 }
 
+function updatejob(jobid, element, value ){
+    jQuery.post('ajax/updatejob/' + jobid, {
+          element: element,
+          value: value,
+          csrfmiddlewaretoken:csrftoken
+        }, function (data) {
+            msg('Job Updated!')
+            $('#job_' + jobid).replaceWith(data);
+            $(document).off('click', '#maincontent', hideStatusSelectors)
+        }).always(function () {
+        }).fail(function (d) {
+            if (d.status == 401) {
+                parent.location = '/accounts/login/'
+            } else {
+                msg('There was an error updating this job. Please try again later.', 'error')
+            }
+        })
+}
 function closeVisibleQuickview(){
     $('[data-dismiss="quickview"]:visible').trigger('click')
 }
@@ -236,6 +254,28 @@ jQuery(document).ready(function ($) {
         let myData = $myButton.data();
         timeMessage(myData.jobid, myData.timeid)
     })
+
+    $(document).on('change', '.joblevelselector', function(e){
+        let $mySelector = $(this)
+        let myData = $mySelector.data();
+        updatejob(myData.id, 'level', $mySelector.val() )
+    })
+
+    $(document).on('change', '.jobstatusselector', function(e){
+        let $mySelector = $(this)
+        let myData = $mySelector.data();
+        updatejob(myData.id, 'status', $mySelector.val() )
+    })
+
+    $(document).on('click', '.statusflag', function(e){
+        $(document).on('click', '#maincontent', hideStatusSelectors)
+        $(this).find('div').show();
+        $(this).find('.jobstatusselector').focus()
+    })
 })
 
+function hideStatusSelectors(){
+    $('.statusflag > div').hide();
+    $(document).off('click', '#maincontent', hideStatusSelectors)
 
+}

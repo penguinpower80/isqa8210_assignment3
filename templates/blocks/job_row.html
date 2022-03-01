@@ -1,5 +1,5 @@
 {% load techtags %}
-<div id="job_{{ job.id }}" class="card block status_{{ job.status.lower }} level_{{ job.level.lower }}">
+<div id="job_{{ job.id }}" class="jobcard card block status_{{ job.status.lower }} level_{{ job.level.lower }}">
     <header class="card-header has-background-link has-text-white">
         <div class="column">
             <p class="card-header-title has-text-white">
@@ -7,11 +7,16 @@
             </p>
         </div>
         <div class="column has-text-right">
-
             <p class="has-text-right" title="{{ job.created_at }}">Submitted {% jobage job.created_at %}</p>
         </div>
     </header>
     <div class="card-content">
+        <div class="statusflag">
+            {{ job.get_status_display }}
+            <div style="display:none">
+                {% status_picker job.status job.id %}
+            </div>
+        </div>
         <div class="content">
             {% appt job.appointment %}
         </div>
@@ -59,11 +64,8 @@
         <div class="card-footer-item">
             {% level_picker job.level job.id %}
         </div>
-        <div class="card-footer-item">
-            {% status_picker job.status job.id %}
-        </div>
-        <div class="card-footer-item">
-            $125.00
+        <div class="card-footer-item jobcost">
+            ${{ job.totalCost|floatformat:2 }}
         </div>
         <div class="card-footer-item">
             Assigned to: {{ job.technician.user.name }}
