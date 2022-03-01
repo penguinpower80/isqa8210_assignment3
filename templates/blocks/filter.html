@@ -1,17 +1,11 @@
+{% load techtags %}
 <div class="columns">
     <div class="column is-one-third">
         <div class="field">
             <p class="control is-expanded has-icons-left">
                 <span class="select is-fullwidth">
-                  <select>
-                    <option selected>Open</option>
-                    <option>Complete</option>
-                    <option>Waiting</option>
-                    <option>Hold</option>
-                    <option>Cancelled</option>
-                    <option>New</option>
-                  </select>
-                    </span>
+                    {% status_picker status=request.GET.status classsuffix='filter' %}
+                </span>
                 <span class="icon is-small is-left">
                         <i class="fas fa-filter"></i>
                     </span>
@@ -22,11 +16,11 @@
         <div class="field">
             <p class="control is-expanded has-icons-left">
                 <span class="select is-fullwidth">
-                  <select>
+                    {% status_picker status=request.GET.status classsuffix='filter' %}
+                  <select class="jobsort">
                     <option selected>Newest</option>
                     <option>Oldest</option>
                     <option>Level</option>
-                    <option>Age</option>
                   </select>
                     </span>
                 <span class="icon is-small is-left">
@@ -38,7 +32,7 @@
     <div class="column is-one-third">
         <div class="field has-addons">
             <div class="control is-expanded">
-                <input class="input " type="text" placeholder="Find a ticket">
+                <input class="input jobsearch" type="text" placeholder="Find a ticket">
             </div>
             <div class="control">
                 <a class="button is-info">

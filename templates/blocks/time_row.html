@@ -2,7 +2,12 @@
 <div class="card is-bordered" id="time_{{ time.id }}">
     <header class="card-header has-background-grey-lighter">
         <p class="card-header-title">
-            {{ time.start }} - {{ time.end }}
+            {{ time.start }} -
+                {% if time.end %}
+                    {{ time.end }}
+                {% else %}
+                    (timer running)
+                {% endif %}
         </p>
         <p class="card-header-title">
             <span class="has-text-grey">{% timeworked start=time.start end=time.end %}</span>

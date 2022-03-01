@@ -1,4 +1,5 @@
 {% load static %}
+{% load techtags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,6 +52,8 @@
                         <div class="navbar-end">
                             {% if user.is_authenticated %}
                                 <a class="navbar-item logout-button" href="{% url 'logout' %}">Log Out</a>
+                                <a class="navbar-item logout-button" href="{% url 'password_reset' %}">Reset Password</a>
+                                <a class="navbar-item logout-button" href="{% url 'password_reset' %}">Profile</a>
                             {% else %}
                                 <a class="navbar-item" href="{% url 'tech:register' %}">
                                     Register
@@ -59,14 +62,6 @@
                                     Log In
                                 </a>
                             {% endif %}
-                            <div class="navbar-item has-dropdown is-hoverable">
-                                <a class="navbar-link">
-                                    More
-                                </a>
-                                <div class="navbar-dropdown">
-
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </nav>
@@ -87,8 +82,13 @@
     {% include 'blocks/footer.html' %}
 </section>
 {% include 'blocks/quickview.html' %}
-{% csrf_token %}
-<script>
-const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-</script>
+{% if user.is_authenticated %}
+    {% csrf_token %}
+    <script>
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const job_levels= {% joblevels %};
+    const job_statii={% jobstatii  %};
+    const part_statii={% partstatii %}
+    </script>
+{% endif %}
 </body>

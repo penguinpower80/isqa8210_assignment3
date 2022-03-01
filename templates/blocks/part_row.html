@@ -1,9 +1,9 @@
-<div class="box" id="jobpart_{{ jobpart.id  }}">
+<div class="box" id="jobpart_{{ jobpart.id }}">
     <article class="media">
         <figure class="media-left">
             <p class="image is-64x64">
                 {% if part.image %}
-                <img class="is-rounded" src="{{ part.image.url }}">
+                    <img class="is-rounded" src="{{ part.image.url }}">
                 {% endif %}
             </p>
         </figure>
@@ -13,16 +13,21 @@
                     <strong>{{ part.name }}</strong>
                     <br>
                     ${{ jobpart.cost|floatformat:2 }}
+                <div class="partstatusflag" data-jobid="{{ jobpart.job.id }}" data-jobpartid="{{ jobpart.id }}" data-value="{{ jobpart.status }}">
+                    <strong>Status:</strong>
                     {% if part.status %}
-                        <div>
-                            <strong>Status:</strong> {{ part.get_status_display }}
-                        </div>
+                        {{ jobpart.get_status_display }}
+                    {% else %}
+                        Not Set
                     {% endif %}
+                </div>
+
                 </p>
             </div>
         </div>
         <div class="media-right">
-            <button class="delete partremove" data-jobpartid={{ jobpart.id }} data-partid="{{ part.id }}" data-jobid="{{ jobpart.job.id }}"></button>
+            <button class="delete partremove" data-jobpartid={{ jobpart.id }} data-partid="{{ part.id }}"
+                    data-jobid="{{ jobpart.job.id }}"></button>
         </div>
     </article>
 </div>

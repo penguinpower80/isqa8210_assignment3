@@ -51,6 +51,7 @@ def timeWorked(seconds):
     else:
         return "No Time"
 
+
 '''
 Checks if the current user is authenticated AND has a connection to the job in quest
 '''
@@ -58,3 +59,23 @@ def canAccess(user, job):
     if not user.is_authenticated:
         return False
     return job.technician_id == user.id | job.customer_id == user.id | user.is_superuser
+
+
+'''
+Generate a JS object for use in pop-ups
+'''
+def generateJsonSelections(choices):
+    options = []
+    for option in choices:
+        options.append(option[0] + ':' + "'{}'".format(option[1]))
+    return '{' + ",".join(options) + '}'
+
+def roundFifteen( minutes ):
+    fullquarters = minutes // 15
+    remainder = minutes % 15
+    if remainder > 7.5:
+        fullquarters += 15
+    if fullquarters == 0:
+        return 15
+
+    return fullquarters

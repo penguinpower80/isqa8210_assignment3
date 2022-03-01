@@ -11,11 +11,8 @@
         </div>
     </header>
     <div class="card-content">
-        <div class="statusflag">
+        <div class="statusflag" data-jobid="{{ job.id }}" data-value="{{ job.status }}">
             {{ job.get_status_display }}
-            <div style="display:none">
-                {% status_picker job.status job.id %}
-            </div>
         </div>
         <div class="content">
             {% appt job.appointment %}
@@ -47,22 +44,16 @@
                         </button>
                     </div>
                     <div class="column has-text-centered">
-                        <button class="button is-success is-fullwidth togglejobtimer" data-active="0" data-job="{{ job.id }}">
-                        <span class="icon">
-                            <i class="fas fa-play"></i>
-                            </span>
-                            <span>
-                        Start Time
-                            </span>
-                        </button>
+                        {% jobtimebutton job %}
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <footer class="card-footer">
-        <div class="card-footer-item">
-            {% level_picker job.level job.id %}
+        <div class="card-footer-item levelflag" data-jobid="{{ job.id }}" data-value="{{ job.level }}">
+            {{ job.get_level_display }}
         </div>
         <div class="card-footer-item jobcost">
             ${{ job.totalCost|floatformat:2 }}

@@ -1,4 +1,3 @@
-import datetime
 import logging
 
 from django import template
@@ -7,8 +6,8 @@ from django.template.loader import render_to_string
 
 from django.utils.safestring import mark_safe
 
-from tech.helpers.helpers import getDateTimeFormat, timeWorked
-from tech.models import JobLevel, Part, JobStatus
+from tech.helpers.helpers import getDateTimeFormat, generateJsonSelections
+from tech.models import JobLevel, Part, JobStatus, PartLocation
 
 register = template.Library()
 
@@ -30,7 +29,7 @@ def level_badge(status):
 
 @register.simple_tag()
 def appt(appt):
-    return mark_safe('<div class="tag is-primary is-light is-large">'
+    return mark_safe('<div class="tag is-primary is-light is-large iscustomerappt">'
                      '<span class="icon">'
                      '<i class="fas fa-calendar"></i>'
                      '</span>'
@@ -62,6 +61,8 @@ def partslist(jobid):
 
 @register.simple_tag()
 def timeworked(start, end):
+    if not end:
+        return ''
     diff = end-start
     days = diff.days
     hours, leftover = divmod(diff.seconds, 3600)
@@ -76,8 +77,8 @@ def timeworked(start, end):
     return ",".join(time_string)
 
 @register.simple_tag
-def status_picker(status, jobid):
-    s='<select class="select jobstatusselector" data-id="'+ str(jobid) +'">'
+def status_picker(status, jobid=None, classsuffix='selector'):
+    s='<select class="select jobstatus'+ classsuffix+'" ' + ('data-id="'+ str(jobid) + '"' if jobid else '') +'>'
     for choice in JobStatus.choices:
         selected = 'selected="SELECTED"' if status==choice[0] else ''
         s+="<option {} value='{}'>{}</option>".format(selected, choice[0], choice[1])
@@ -92,3 +93,27 @@ def level_picker(level, jobid):
         s+="<option {} value='{}'>{}</option>".format(selected, choice[0], choice[1])
     s+='</select>'
     return mark_safe(s)
+
+@register.simple_tag
+def joblevels():
+    return mark_safe( generateJsonSelections(JobLevel.choices))
+
+@register.simple_tag
+def jobstatii():
+    return mark_safe( generateJsonSelections(JobStatus.choices))
+
+@register.simple_tag
+def partstatii():
+    return mark_safe(generateJsonSelections(PartLocation.choices))
+
+@register.simple_tag
+def jobtimebutton(job):
+
+    active = job.jobtime_set.filter(end__isnull=True).count()
+
+    return mark_safe('<button class ="button is-'+ ("danger" if active==1 else "success") +' is-fullwidth togglejobtimer" data-active="'+str(active)+'" data-job="'+ str(job.id) +'" >'
+    '<span class="icon">'
+    '<i class="fas fa-'+ ("stop" if active==1 else "play") +'"></i>'
+    '</span>'
+    '<span class="timertext"> '+ ("Stop" if active==1 else "Start") +' Time </span>'
+    '</button>')

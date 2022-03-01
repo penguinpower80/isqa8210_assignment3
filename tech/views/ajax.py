@@ -58,6 +58,30 @@ def removepart(request, jobid, jobpartid):
     return HttpResponse(status=200)
 
 '''
+Update a job part element
+'''
+def updatejobpart(request, jobid, jobpartid):
+    job = get_object_or_404(Job, pk=jobid)
+    jobpart = get_object_or_404(JobPart, pk=jobpartid)
+    if not canAccess(request.user, job):
+        return HttpResponse(status=401)
+
+    element = request.POST.get("element")
+    value = request.POST.get("value")
+
+    #only allow explicit columns to be saved
+    if element and value:
+        if element == 'status':
+            jobpart.status = value
+
+    jobpart.save()
+
+    return render(request, 'blocks/part_row.html', {
+        'jobpart': jobpart,
+        'part': jobpart.part
+    })
+
+'''
 Return a list of times for this job
 '''
 def jobtimes(request, jobid):
@@ -159,14 +183,8 @@ def updatejob(request, jobid):
             job.status = value
         if element=='level':
             job.level = value
-
-
+        job.save()
 
     return render(request, 'blocks/job_row.html', {
         'job': job,
     })
-
-    return HttpResponse(status=500, content="GOOD")
-
-def getjobcost(request, jobid):
-    pass

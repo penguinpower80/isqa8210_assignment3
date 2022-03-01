@@ -6,8 +6,8 @@ const Toast = Swal.mixin({
     timer: 2000,
     timerProgressBar: true,
     didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
+        //toast.addEventListener('mouseenter', Swal.stopTimer)
+        //toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
 })
 
@@ -21,6 +21,10 @@ function msg(text, type) {
 
 async function timeMessage(jobid, timeid) {
     const {value: text} = await Swal.fire({
+        customClass: {
+            confirmButton: 'button is-primary',
+            cancelButton: 'button is-danger'
+        },
         input: 'textarea',
         inputLabel: 'Message',
         inputPlaceholder: 'Type your message here...',
@@ -32,12 +36,12 @@ async function timeMessage(jobid, timeid) {
 
     if (text) {
         jQuery.post('ajax/addtimecomment/' + jobid + '/' + timeid, {
-          text:text,
-          csrfmiddlewaretoken:csrftoken
+            text: text,
+            csrfmiddlewaretoken: csrftoken
         }, function (data) {
             msg('Time comment added!')
-            if ( $('#time_' + timeid).find('.card-content').length) {
-                   $('#time_' + timeid).find('.card-content .content').text(text)
+            if ($('#time_' + timeid).find('.card-content').length) {
+                $('#time_' + timeid).find('.card-content .content').text(text)
             } else {
                 $('#time_' + timeid).find('.card-header').after('<div class="card-content"><div class="content">' + text + '</div></div>');
             }
@@ -53,25 +57,68 @@ async function timeMessage(jobid, timeid) {
     }
 }
 
-function updatejob(jobid, element, value ){
-    jQuery.post('ajax/updatejob/' + jobid, {
-          element: element,
-          value: value,
-          csrfmiddlewaretoken:csrftoken
-        }, function (data) {
-            msg('Job Updated!')
-            $('#job_' + jobid).replaceWith(data);
-            $(document).off('click', '#maincontent', hideStatusSelectors)
-        }).always(function () {
-        }).fail(function (d) {
-            if (d.status == 401) {
-                parent.location = '/accounts/login/'
-            } else {
-                msg('There was an error updating this job. Please try again later.', 'error')
-            }
-        })
+async function selectorPopup(title, choices, value, callback) {
+    const {value: choice} = await Swal.fire({
+        customClass: {
+            confirmButton: 'button is-primary',
+            cancelButton: 'button is-danger'
+        },
+        title: 'Select Job Status',
+        input: 'select',
+        inputValue: value,
+        inputOptions: choices,
+        inputPlaceholder: 'Select a ' + title.toLowerCase(),
+        showCancelButton: true,
+
+    })
+
+    if (choice) {
+        callback(choice)
+    }
 }
-function closeVisibleQuickview(){
+
+function updatejob(jobid, element, value) {
+    jQuery.post('ajax/updatejob/' + jobid, {
+        element: element,
+        value: value,
+        csrfmiddlewaretoken: csrftoken
+    }, function (data) {
+        if (element != '') {
+            msg('Job Updated!')
+        }
+        $('#job_' + jobid).replaceWith(data);
+    }).always(function () {
+    }).fail(function (d) {
+        if (d.status == 401) {
+            parent.location = '/accounts/login/'
+        } else {
+            msg('There was an error updating this job. Please try again later.', 'error')
+        }
+    })
+}
+
+function updatepart(jobid, partid, element, value) {
+    jQuery.post('ajax/updatepart/' + jobid + '/' + partid, {
+        element: element,
+        value: value,
+        csrfmiddlewaretoken: csrftoken
+    }, function (data) {
+        msg('Part Updated!')
+        $('#jobpart_' + partid).replaceWith(data);
+
+        updatejob(jobid, '', '')
+
+    }).always(function () {
+    }).fail(function (d) {
+        if (d.status == 401) {
+            parent.location = '/accounts/login/'
+        } else {
+            msg('There was an error updating this part. Please try again later.', 'error')
+        }
+    })
+}
+
+function closeVisibleQuickview() {
     $('[data-dismiss="quickview"]:visible').trigger('click')
 }
 
@@ -126,6 +173,10 @@ jQuery(document).ready(function ($) {
         let $myButton = $(this)
         let myData = $myButton.data();
         Swal.fire({
+            customClass: {
+                confirmButton: 'button is-primary',
+                cancelButton: 'button is-danger'
+            },
             title: 'Are you sure?',
             text: 'This will permanently delete this part from the job.',
             icon: 'warning',
@@ -199,11 +250,14 @@ jQuery(document).ready(function ($) {
                 $myButton.removeClass('is-success').addClass('is-danger')
                 $myButton.find('.fas').attr('class', 'fas fa-stop')
                 $myButton.data('active', 1)
+                $myButton.find('.timertext').text('Stop Time')
             } else {
                 $myButton.find('.fas').attr('class', 'fas fa-play')
                 $myButton.removeClass('is-danger').addClass('is-success')
+                $myButton.find('.timertext').text('Start Time')
                 msg('Timer stopped.')
                 $myButton.data('active', 0)
+                updatejob(myData.job, '', '')
             }
         }).always(function () {
             $myButton.prop('disabled', false)
@@ -224,6 +278,10 @@ jQuery(document).ready(function ($) {
         let $myButton = $(this)
         let myData = $myButton.data();
         Swal.fire({
+            customClass: {
+                confirmButton: 'button is-primary',
+                cancelButton: 'button is-danger'
+            },
             title: 'Are you sure?',
             text: 'This will permanently delete this time from the job.',
             icon: 'warning',
@@ -236,6 +294,7 @@ jQuery(document).ready(function ($) {
                 jQuery.get('ajax/removetime/' + myData.jobid + '/' + myData.timeid, function (data) {
                     msg('Time Removed!')
                     $('#time_' + myData.timeid).remove()
+                    updatejob(myData.jobid, '', '')
                 }).always(function () {
                     $myButton.prop('disabled', false)
                 }).fail(function (d) {
@@ -255,27 +314,61 @@ jQuery(document).ready(function ($) {
         timeMessage(myData.jobid, myData.timeid)
     })
 
-    $(document).on('change', '.joblevelselector', function(e){
+    $(document).on('change', '.joblevelselector', function (e) {
         let $mySelector = $(this)
         let myData = $mySelector.data();
-        updatejob(myData.id, 'level', $mySelector.val() )
+        updatejob(myData.id, 'level', $mySelector.val())
     })
 
-    $(document).on('change', '.jobstatusselector', function(e){
+    $(document).on('change', '.jobstatusselector', function (e) {
         let $mySelector = $(this)
         let myData = $mySelector.data();
-        updatejob(myData.id, 'status', $mySelector.val() )
+        updatejob(myData.id, 'status', $mySelector.val())
     })
 
-    $(document).on('click', '.statusflag', function(e){
-        $(document).on('click', '#maincontent', hideStatusSelectors)
-        $(this).find('div').show();
-        $(this).find('.jobstatusselector').focus()
+    $(document).on('click', '.statusflag', function (e) {
+        let $mySelector = $(this)
+        let myData = $mySelector.data();
+        selectorPopup("Job Status", job_statii, myData.value, function (newvalue) {
+            updatejob(myData.jobid, 'status', newvalue)
+        })
+    })
+
+    $(document).on('click', '.levelflag', function (e) {
+        let $mySelector = $(this)
+        let myData = $mySelector.data();
+        selectorPopup("Job Level", job_levels, myData.value, function (newvalue) {
+            updatejob(myData.jobid, 'level', newvalue)
+        })
+    })
+
+    $(document).on('click', '.partstatusflag', function (e) {
+        let $mySelector = $(this)
+        let myData = $mySelector.data();
+        selectorPopup("Part Status", part_statii, myData.value, function (newvalue) {
+            updatepart(myData.jobid, myData.jobpartid, 'status', newvalue)
+        })
+    })
+
+    $(document).on('click', '.iscustomerappt', function (e) {
+
+        Swal.fire({
+            title: '<strong>HTML <u>example</u></strong>',
+            icon: 'info',
+            html: '<input id="datepicker">',
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false,
+            willOpen: function () {
+                $('#datepicker').datetimepicker({});
+            },
+            confirmButtonText:
+                '<i class="fa fa-thumbs-up"></i> Great!',
+            confirmButtonAriaLabel: 'Thumbs up, great!',
+            cancelButtonText:
+                '<i class="fa fa-thumbs-down"></i>',
+            cancelButtonAriaLabel: 'Thumbs down'
+        })
     })
 })
 
-function hideStatusSelectors(){
-    $('.statusflag > div').hide();
-    $(document).off('click', '#maincontent', hideStatusSelectors)
-
-}
