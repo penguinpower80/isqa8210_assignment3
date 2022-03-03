@@ -1,0 +1,17 @@
+<h1>Welcome {{ user.name }}</h1>
+{% include "blocks/filter.html" %}
+{% if search_phrase %}
+    <div class="columns">
+    <div class="column level has-text-left">
+        <span class="level-item ">
+            <strong>Search Phrase:</strong> {{ search_phrase }}
+            <button type="button" id="clearsearch" class="button is-danger is-small is-inverted">Clear Phrase</button>
+            <button type="button" id="resetsearch" class="button is-danger is-small is-inverted" title="All status, all levels">Reset Search</button>
+        </span>
+    </div>
+    </div>
+
+{% endif %}
+ {% for job in jobCollection %}
+     {% include "blocks/job_row.html" %}
+ {% endfor %}

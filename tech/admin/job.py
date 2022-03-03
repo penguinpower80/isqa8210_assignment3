@@ -36,7 +36,10 @@ class JobAdmin(admin.ModelAdmin):
         return self.customer.get_full_name()
 
     def technician_name(self, obj):
-        return obj.technician.user.get_full_name()
+        if obj.technician:
+            return obj.technician.user.get_full_name()
+        else:
+            return '-'
 
     def appt(self, obj):
         return obj.fmtAppt()

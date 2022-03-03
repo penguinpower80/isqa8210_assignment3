@@ -55,22 +55,28 @@ def timeWorked(seconds):
 '''
 Checks if the current user is authenticated AND has a connection to the job in quest
 '''
+
+
 def canAccess(user, job):
     if not user.is_authenticated:
         return False
-    return job.technician_id == user.id | job.customer_id == user.id | user.is_superuser
+
+    return job.technician_id == user.id or job.customer_id == user.id or user.is_superuser
 
 
 '''
 Generate a JS object for use in pop-ups
 '''
+
+
 def generateJsonSelections(choices):
     options = []
     for option in choices:
         options.append(option[0] + ':' + "'{}'".format(option[1]))
     return '{' + ",".join(options) + '}'
 
-def roundFifteen( minutes ):
+
+def roundFifteen(minutes):
     fullquarters = minutes // 15
     remainder = minutes % 15
     if remainder > 7.5:
@@ -79,3 +85,14 @@ def roundFifteen( minutes ):
         return 15
 
     return fullquarters
+
+
+def selectorBuilder(choices, selected_value, jobid=None, name='', class_name='ttselector', all_option=False, all_text='All'):
+    s = '<select name="'+ name +'" class="select ' + class_name + '" ' + ('data-id="' + str(jobid) + '"' if jobid else '') + '>'
+    if all_option:
+        s += "<option value=''>{}</option>".format(all_text)
+    for choice in choices:
+        selected = 'selected="SELECTED"' if selected_value == choice[0] else ''
+        s += "<option {} value='{}'>{}</option>".format(selected, choice[0], choice[1])
+    s += '</select>'
+    return s

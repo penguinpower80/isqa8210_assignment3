@@ -25,9 +25,11 @@
                 </p>
             </div>
         </div>
+    {% if user.is_tech %}
         <div class="media-right">
             <button class="delete partremove" data-jobpartid={{ jobpart.id }} data-partid="{{ part.id }}"
                     data-jobid="{{ jobpart.job.id }}"></button>
         </div>
+    {% endif %}
     </article>
 </div>

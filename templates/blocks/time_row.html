@@ -24,7 +24,9 @@
         <div class="card-footer-item">
             <strong>Tech: </strong>&nbsp;&nbsp;<span>{{ time.technician.user.name }}</span>
         </div>
+        {% if user.is_tech %}
         <a href="#" class="card-footer-item addtimecomment" data-jobid="{{ time.job_id }}" data-timeid="{{ time.id }}">Comment</a>
         <a href="#" class="card-footer-item timeremove" data-jobid="{{ time.job_id }}" data-timeid="{{ time.id }}">Delete</a>
+        {% endif %}
     </footer>
 </div>

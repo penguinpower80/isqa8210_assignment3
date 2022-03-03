@@ -25,12 +25,20 @@
   </div>
 
   <div class="media-right">
-    <button class="button is-primary is-fullwidth partadd" data-jobid="{{ jobid }}" data-partid="{{ part.id }}">
+    <button title="Add part as pending" class="button is-primary is-fullwidth partadd mb-2" data-jobid="{{ jobid }}" data-partid="{{ part.id }}">
         <span class="icon">
             <i class="fas fa-plus"></i>
         </span>
         <span>
             Add Part
+        </span>
+    </button>
+      <button title="Add part as installed" class="button is-success is-fullwidth partinstall" data-jobid="{{ jobid }}" data-partid="{{ part.id }}">
+        <span class="icon">
+            <i class="fas fa-plus"></i>
+        </span>
+        <span>
+            Install Part
         </span>
     </button>
   </div>

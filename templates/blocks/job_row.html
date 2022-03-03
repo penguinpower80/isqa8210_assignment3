@@ -3,7 +3,11 @@
     <header class="card-header has-background-link has-text-white">
         <div class="column">
             <p class="card-header-title has-text-white">
-                {{ job.customer.name }} ({{ job.customer.username }})
+                {% if user.is_customer %}
+                    Request #{{ job.id }}, made on {{ job.created_at }}
+                {% else %}
+                    {{ job.customer.name }} ({{ job.customer.username }})
+                {% endif %}
             </p>
         </div>
         <div class="column has-text-right">
@@ -15,7 +19,7 @@
             {{ job.get_status_display }}
         </div>
         <div class="content">
-            {% appt job.appointment %}
+            {% appt job.appointment job.id %}
         </div>
         <div class="content">
             {{ job.description }}
@@ -45,7 +49,6 @@
                     </div>
                     <div class="column has-text-centered">
                         {% jobtimebutton job %}
-
                     </div>
                 </div>
             </div>

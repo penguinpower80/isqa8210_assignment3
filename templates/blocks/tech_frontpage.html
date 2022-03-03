@@ -1,5 +1,0 @@
-<h1>Welcome {% if user.firstname %}{{ user.firstname }}{% else %}{{ user.username }}{% endif %}</h1>
-{% include "blocks/filter.html" %}
- {% for job in jobCollection %}
-     {% include "blocks/job_row.html" %}
- {% endfor %}

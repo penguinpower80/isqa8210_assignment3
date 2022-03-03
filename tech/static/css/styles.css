@@ -86,7 +86,7 @@ img.desktop-logo {
     border-color:mediumpurple;
 }
 
-.statusflag, .levelflag, .partstatusflag {
+.technician .statusflag, .technician .levelflag, .technician .partstatusflag, .technician .iscustomerappt {
     cursor: pointer;
 }
 
@@ -95,4 +95,8 @@ img.desktop-logo {
     padding-left: 1em;
     padding-right: 1em;
     padding-top: calc(0.5em - 1px);
+}
+
+#id_description {
+    height: 100px;
 }

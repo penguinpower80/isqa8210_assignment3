@@ -42,6 +42,9 @@ This project will be a technical support dispatch and logging system.  Users wil
 - Sweet Alert 2
   - https://sweetalert2.github.io/
 
+## Jquery Date/Time Picker
+- https://flatpickr.js.org/
+
 ## Icons
 - Fontawesome
   - https://fontawesome.com/

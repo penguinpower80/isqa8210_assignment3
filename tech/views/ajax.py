@@ -6,16 +6,18 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.utils.dateparse import parse_datetime
 
 from tech.helpers.helpers import canAccess
 from tech.models import JobPart, Job, Part, PartLocation, JobTime, Technician
 
-
 '''
 List a parts from a job
 '''
+
+
 def jobparts(request, jobid):
-    job = get_object_or_404(Job, pk=jobid )
+    job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
         return HttpResponse(status=401)
     parts = JobPart.objects.filter(job_id=jobid)
@@ -28,6 +30,8 @@ def jobparts(request, jobid):
 '''
 Add a part from a job
 '''
+
+
 def addpart(request, jobid, partid):
     job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
@@ -36,7 +40,13 @@ def addpart(request, jobid, partid):
     jobpart = JobPart()
     jobpart.job = job
     jobpart.part = part
-    jobpart.status = PartLocation.PENDING
+
+    status = request.POST.get('status')
+    if status:
+        jobpart.status = status.upper()
+    else:
+        jobpart.status = PartLocation.PENDING
+
     jobpart.cost = part.cost
     jobpart.save()
 
@@ -45,21 +55,27 @@ def addpart(request, jobid, partid):
         'jobpart': jobpart
     })
 
+
 '''
 Remove a part from a job
 '''
+
+
 def removepart(request, jobid, jobpartid):
-    job = get_object_or_404(Job, pk=jobid )
-    jobpart= get_object_or_404(JobPart, pk=jobpartid)
+    job = get_object_or_404(Job, pk=jobid)
+    jobpart = get_object_or_404(JobPart, pk=jobpartid)
     if not canAccess(request.user, job):
         return HttpResponse(status=401)
 
     jobpart.delete()
     return HttpResponse(status=200)
 
+
 '''
 Update a job part element
 '''
+
+
 def updatejobpart(request, jobid, jobpartid):
     job = get_object_or_404(Job, pk=jobid)
     jobpart = get_object_or_404(JobPart, pk=jobpartid)
@@ -69,7 +85,7 @@ def updatejobpart(request, jobid, jobpartid):
     element = request.POST.get("element")
     value = request.POST.get("value")
 
-    #only allow explicit columns to be saved
+    # only allow explicit columns to be saved
     if element and value:
         if element == 'status':
             jobpart.status = value
@@ -81,9 +97,12 @@ def updatejobpart(request, jobid, jobpartid):
         'part': jobpart.part
     })
 
+
 '''
 Return a list of times for this job
 '''
+
+
 def jobtimes(request, jobid):
     job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
@@ -99,12 +118,14 @@ def jobtimes(request, jobid):
 '''
 Add an start stamp to the record
 '''
+
+
 def starttime(request, jobid):
     job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
         return HttpResponse(status=401)
 
-    #if they push start, and a job is already running, just return an "ok"
+    # if they push start, and a job is already running, just return an "ok"
     jobtime = JobTime.objects.filter(end__isnull=True).count()
     if jobtime > 0:
         logging.warning('Job already started')
@@ -118,9 +139,12 @@ def starttime(request, jobid):
     jobtime.save()
     return HttpResponse(status=200)
 
+
 '''
 Add an end stamp to the record
 '''
+
+
 def stoptime(request, jobid):
     job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
@@ -140,9 +164,12 @@ def stoptime(request, jobid):
     jobtime.save()
     return HttpResponse(status=200)
 
+
 '''
 Add an end stamp to the record
 '''
+
+
 def removetime(request, jobid, timeid):
     job = get_object_or_404(Job, pk=jobid)
     time = get_object_or_404(JobTime, pk=timeid)
@@ -153,9 +180,12 @@ def removetime(request, jobid, timeid):
 
     return HttpResponse(status=200)
 
+
 '''
 Add comment to a time record
 '''
+
+
 def addtimecomment(request, jobid, timeid):
     job = get_object_or_404(Job, pk=jobid)
     time = get_object_or_404(JobTime, pk=timeid)
@@ -167,9 +197,12 @@ def addtimecomment(request, jobid, timeid):
     time.save()
     return HttpResponse(status=200)
 
+
 '''
 Updates various elements of the job
 '''
+
+
 def updatejob(request, jobid):
     job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
@@ -179,10 +212,15 @@ def updatejob(request, jobid):
     value = request.POST.get("value")
 
     if element and value:
-        if element=='status':
+        if element == 'status':
             job.status = value
-        if element=='level':
+        if element == 'level':
             job.level = value
+        if element == 'appointment':
+            tz = pytz.timezone(settings.TIME_ZONE)
+            datetimeappt = parse_datetime(value)
+            datetimeappt = datetimeappt.replace(tzinfo=tz)
+            job.appointment = datetimeappt
         job.save()
 
     return render(request, 'blocks/job_row.html', {

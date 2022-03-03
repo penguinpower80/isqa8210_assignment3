@@ -13,7 +13,7 @@ from tech.models.user import User
 
 class Job(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='jobcustomer')
-    technician = models.ForeignKey(Technician, on_delete=models.CASCADE, related_name='jobtechnician')
+    technician = models.ForeignKey(Technician, on_delete=models.CASCADE, related_name='jobtechnician', null=True)
     status = models.CharField(
         max_length=1,
         choices=JobStatus.choices,
@@ -22,9 +22,10 @@ class Job(models.Model):
     level = models.CharField(
         max_length=1,
         choices=JobLevel.choices,
-        default=JobLevel.NORMAL
+        default=JobLevel.NORMAL,
+        help_text="How urgent do you think this problem is?"
     )
-    description = models.TextField(help_text="Describe what the problem is.")
+    description = models.TextField(help_text="Describe in detail what the problem is.")
     appointment = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
