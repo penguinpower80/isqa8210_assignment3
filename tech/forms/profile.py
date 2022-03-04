@@ -1,10 +1,10 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from tech.models import User, UserTypes
 
 
-class ProfileForm(forms.ModelForm):
+class ProfileForm(UserChangeForm):
     email = forms.EmailField(label="Email address", required=True, help_text="Required.",)
     phone = forms.CharField(label="Phone", required=True, help_text="Required. Format: ###-###-####",)
     street1 = forms.CharField(label="Street Address 1", required=True, help_text="Required.",)
@@ -13,9 +13,14 @@ class ProfileForm(forms.ModelForm):
     state = forms.CharField(help_text="Required.")
     zip = forms.CharField(help_text="Required.")
 
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        del self.fields['password']
+
     class Meta:
         model = User
-        fields = ("first_name", "last_name","email", "phone", "street1", "street2", "city", "state", "zip", "password")
+        fields = ("first_name", "last_name","email", "phone", "street1", "street2", "city", "state", "zip",)
+
     def clean_email(self):
         if User.objects.filter(email="email").exists():
             raise forms.ValidationError("Email is not unique.")
@@ -26,12 +31,4 @@ class ProfileForm(forms.ModelForm):
             raise forms.ValidationError("Please use required phone format.")
         return self.cleaned_data["phone"]
 
-    def save(self, commit=True):
-        user = super(UserCreationForm, self).save(commit=False)
-        user.username = (self.cleaned_data["username"])
-        user.email = (self.cleaned_data["email"])
-        user.set_password(self.cleaned_data["password1"])
-        user.type = UserTypes.CUSTOMER #FORCE THEM TO BE A CUSTOMER!
-        if commit:
-            user.save()
-        return user
+

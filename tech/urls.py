@@ -7,7 +7,7 @@ urlpatterns = [
           path('', views.home, name='home'),
           path('register', views.register, name='register'),
           path('profile', views.profile, name='profile'),
-          path('request', views.request, name='newrequest'),
+          path('newrequest', views.request, name='newrequest'),
           path('ajax/jobparts/<int:jobid>', views.ajax.jobparts, name='jobparts'),
           path('ajax/addpart/<int:jobid>/<int:partid>', views.ajax.addpart, name='addpart'),
           path('ajax/updatepart/<int:jobid>/<int:jobpartid>', views.ajax.updatejobpart, name='updatejobpart'),
@@ -18,4 +18,6 @@ urlpatterns = [
           path('ajax/removetime/<int:jobid>/<int:timeid>', views.ajax.removetime, name='removetime'),
           path('ajax/addtimecomment/<int:jobid>/<int:timeid>', views.ajax.addtimecomment, name='addtimecomment'),
           path('ajax/updatejob/<int:jobid>', views.ajax.updatejob, name='updatejob'),
+          path('invoice/pdf/<int:jobid>', views.invoice.pdf, name='pdfinvoice'),
+          path('invoice/html/<int:jobid>', views.invoice.html, name='htmlinvoice'),
 ]

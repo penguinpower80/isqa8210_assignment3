@@ -30,38 +30,40 @@ def level_badge(status):
 @register.simple_tag()
 def appt(appt, jobid):
     if appt:
-        return mark_safe('<div class="tag is-primary is-light is-large iscustomerappt" data-jobid='+ str(jobid) +' data-appt="' +
-                         appt.strftime("%Y-%m-%d %H:%M:%S") + '">'
-                         '<span class="icon">'
-                         '<i class="fas fa-calendar"></i>'
-                         '</span>'
-                         '<span>'
-                         '<span class="is-hidden-mobile">'
-                         'Appointment: '
-                         '</span>' +
-                         appt.strftime(getDateTimeFormat()) +
-                         ' <span class="is-hidden-mobile">'
-                         '(' + humanize.naturaltime(appt) + ')'
-                                                            '</span>'
-                                                            '</span>'
-                                                            '</div>')
+        return mark_safe(
+            '<div class="tag is-primary is-light is-large iscustomerappt" data-jobid=' + str(jobid) + ' data-appt="' +
+            appt.strftime("%Y-%m-%d %H:%M:%S") + '">'
+                                                 '<span class="icon">'
+                                                 '<i class="fas fa-calendar"></i>'
+                                                 '</span>'
+                                                 '<span>'
+                                                 '<span class="is-hidden-mobile">'
+                                                 'Appointment: '
+                                                 '</span>' +
+            appt.strftime(getDateTimeFormat()) +
+            ' <span class="is-hidden-mobile">'
+            '(' + humanize.naturaltime(appt) + ')'
+                                               '</span>'
+                                               '</span>'
+                                               '</div>')
     else:
-        return mark_safe('<div class="tag is-primary is-light is-large iscustomerappt" data-jobid='+ str(jobid) +' data-appt="">'
-                         '<span class="icon">'
-                         '<i class="fas fa-calendar"></i>'
-                         '</span>'
-                         '<span>'
-                         '<span class="is-hidden-mobile">'
-                         'Appointment: '
-                         '</span>NO APPOINTMENT SET<span class="is-hidden-mobile">'                         
-                                                            '</span>'
-                                                            '</span>'
-                                                            '</div>')
+        return mark_safe(
+            '<div class="tag is-primary is-light is-large iscustomerappt" data-jobid=' + str(jobid) + ' data-appt="">'
+                                                                                                      '<span class="icon">'
+                                                                                                      '<i class="fas fa-calendar"></i>'
+                                                                                                      '</span>'
+                                                                                                      '<span>'
+                                                                                                      '<span class="is-hidden-mobile">'
+                                                                                                      'Appointment: '
+                                                                                                      '</span>NONE SET<span class="is-hidden-mobile">'
+                                                                                                      '</span>'
+                                                                                                      '</span>'
+                                                                                                      '</div>')
 
 
 @register.simple_tag()
 def jobage(created):
-    return humanize.naturalday(created)
+    return humanize.naturalday(created).capitalize()
 
 
 @register.simple_tag()
@@ -89,7 +91,27 @@ def timeworked(start, end):
         time_string.append(str(hours) + ' hour(s)')
     if minutes > 0:
         time_string.append(str(minutes) + ' minute(s)')
-    return ",".join(time_string)
+    return ", ".join(time_string)
+
+
+@register.simple_tag()
+def totaltime(job):
+    total_seconds = 0
+    days = 0
+    for time in job.jobtime_set.all():
+        if not time.end:
+            continue
+        diff = time.end - time.start
+        total_seconds = total_seconds + diff.seconds
+
+    hours, leftover = divmod(total_seconds, 3600)
+    minutes, seconds = divmod(leftover, 60)
+    time_string = []
+    if hours > 0:
+        time_string.append(str(hours) + ' hour(s)')
+    if minutes > 0:
+        time_string.append(str(minutes) + ' minute(s)')
+    return ", ".join(time_string)
 
 
 @register.simple_tag
@@ -100,7 +122,7 @@ def status_picker(status, jobid=None, classsuffix='selector', alloption=False, a
 
 @register.simple_tag
 def level_picker(level, jobid=None, classsuffix='selector', alloption=False, alltext='All Levels'):
-    s = selectorBuilder(JobLevel.choices, level, jobid, 'level', 'joblevel'+classsuffix, alloption, alltext)
+    s = selectorBuilder(JobLevel.choices, level, jobid, 'level', 'joblevel' + classsuffix, alloption, alltext)
     return mark_safe(s)
 
 
@@ -119,12 +141,10 @@ def partstatii():
     return mark_safe(generateJsonSelections(PartLocation.choices))
 
 
-@register.simple_tag(takes_context=True)
-def jobtimebutton(context, job):
-    if not context.request.user.is_tech():
-        return ''
+@register.simple_tag()
+def jobtimebutton(job):
     active = job.jobtime_set.filter(end__isnull=True).count()
-    return mark_safe('<button class ="button is-' + (
+    return mark_safe('<button class="button is-' + (
         "danger" if active == 1 else "success") + ' is-fullwidth togglejobtimer" data-active="' + str(
         active) + '" data-job="' + str(job.id) + '" >'
                                                  '<span class="icon">'
@@ -133,3 +153,9 @@ def jobtimebutton(context, job):
                                                                                                              '<span class="timertext"> ' + (
                          "Stop" if active == 1 else "Start") + ' Time </span>'
                                                                '</button>')
+
+
+@register.simple_tag()
+def invoicebutton(job):
+    return mark_safe(
+        '<a class="button is-success is-fullwidth" href="#"><span class="icon"><i class="fas fa-file"></i></span><span>Invoice</span></a>')

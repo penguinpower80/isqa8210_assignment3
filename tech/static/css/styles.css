@@ -53,6 +53,18 @@ img.desktop-logo {
     margin-top: -15px;
 }
 
+@media screen and (max-width: 1023px) {
+    .statusflag {
+        position: relative;
+        text-align: center;
+    }
+
+    .iscustomerappt {
+        width:100%;
+        margin-top:10px;
+    }
+}
+
 .jobcard.status_n .statusflag {
     background-color: blue;
     border-color:blue;

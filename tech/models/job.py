@@ -43,13 +43,17 @@ class Job(models.Model):
         else:
             return ''
 
-    def totalCost(self):
-        # Hours cost
-        # parts cost
-        totalcost = 0
+
+    def partCost(self):
         partscost = self.jobpart_set.filter(status=PartLocation.INSTALLED).aggregate(Sum('cost'))
         if partscost['cost__sum']:
-            totalcost += partscost['cost__sum']
+            return partscost['cost__sum']
+        else:
+            return 0
+
+
+    def timeCost(self):
+        totalcost = 0
         time_per_user = {}
         for t in self.jobtime_set.all():
             if not t.end:
@@ -64,10 +68,16 @@ class Job(models.Model):
 
         if len(time_per_user) > 0:
             for t in time_per_user:
-                minutes = time_per_user[t]['seconds'] / 60 # minutes
-                hours = roundFifteen(minutes) / 60
-                totalcost += hours * time_per_user[t]['tech'].level.payrate;
+                seconds = time_per_user[t]['seconds']
+                minutes = time_per_user[t]['seconds'] / 60  # minutes
+                hours = roundFifteen(minutes)
+                logging.warning(hours)
+                totalcost += hours * time_per_user[t]['tech'].level.payrate
+
         return totalcost
+
+    def totalCost(self):
+        return self.partCost() + self.timeCost()
 
     def __str__(self):
         return "Job " + str(self.id)

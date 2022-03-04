@@ -4,14 +4,17 @@
         <div class="column">
             <p class="card-header-title has-text-white">
                 {% if user.is_customer %}
-                    Request #{{ job.id }}, made on {{ job.created_at }}
+                    <span class="is-hidden-touch">Request #{{ job.id }}, made on {{ job.created_at }}</span>
                 {% else %}
                     {{ job.customer.name }} ({{ job.customer.username }})
                 {% endif %}
             </p>
         </div>
         <div class="column has-text-right">
-            <p class="has-text-right" title="{{ job.created_at }}">Submitted {% jobage job.created_at %}</p>
+            <p class="has-text-right" title="{{ job.created_at }}">
+                <span class="is-hidden-touch">Submitted </span>
+                {% jobage job.created_at %}
+            </p>
         </div>
     </header>
     <div class="card-content">
@@ -43,12 +46,33 @@
                         <i class="fas fa-stopwatch"></i>
                             </span>
                             <span>
-                        View Time
+                        Time
                             </span>
                         </button>
                     </div>
                     <div class="column has-text-centered">
-                        {% jobtimebutton job %}
+                        {% if user.is_tech %}
+                            {% jobtimebutton job %}
+                        {% else %}
+                                <p class="control">
+                                    <a target="_blank" class="button is-success is-fullwidth" href="{% url 'tech:htmlinvoice' job.id %}">
+                                      <span class="icon is-small">
+                                        <i class="fas fa-file"></i>
+                                      </span>
+                                        <span>Invoice</span>
+                                    </a>
+                                </p>
+                                <p class="control">
+                                    <a target="_blank" class="button is-success is-outlined is-fullwidth" href="{% url 'tech:pdfinvoice' job.id %}">
+                                        <span>Download</span>
+                                        <span class="is-hidden-touch">(PDF)</span>
+                                        <span class="icon is-small">
+                                        <i class="fas fa-file-pdf"></i>
+                                      </span>
+                                    </a>
+                                </p>
+
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -62,7 +86,9 @@
             ${{ job.totalCost|floatformat:2 }}
         </div>
         <div class="card-footer-item">
-            Assigned to: {{ job.technician.user.name }}
+            <span class="is-hidden-touch">
+            Assigned to:
+            </span>{{ job.technician.user.name }}
         </div>
     </footer>
 </div>

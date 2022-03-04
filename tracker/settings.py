@@ -106,7 +106,9 @@ else:
         },
     }
 
-
+if config('EMAIL', default='LOCAL') == 'LOCAL':
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = 'app-messages'  # change this to a proper location
 
 AUTH_USER_MODEL = 'tech.User'
 
@@ -148,7 +150,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'tech\static')
 
 MEDIA_URL = '/media/'
 
@@ -168,4 +170,5 @@ if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and AWS_STORAGE_BUCKET_NAME:
 else:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-django_heroku.settings(locals())
+if config("HEROKU", default='False') == 'True':
+    django_heroku.settings(locals())

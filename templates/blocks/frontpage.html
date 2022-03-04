@@ -1,5 +1,12 @@
 <h1>Welcome {{ user.name }}</h1>
+{% if message %}
+    <div class="techmessage notification is-success">
+    <button class="delete"></button>
+    {{ message }}
+    </div>
+{% endif %}
 {% include "blocks/filter.html" %}
+
 {% if search_phrase %}
     <div class="columns">
     <div class="column level has-text-left">

@@ -29,7 +29,7 @@
 {% for field in form.visible_fields %}
     <div class="field">
         <label for="{{ field.id_for_label }}" class="label">{{ field.label }}</label>
-        <div clss="control">
+        <div class="control">
             {% if form.is_bound %}
                 {% if field.errors %}
                     {% render_field field class="input " %}

@@ -1,0 +1,118 @@
+{% load techtags %}
+<html>
+{% if isHtml %}
+    <head>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/pdf.css' %}"/>
+
+    </head>
+{% endif %}
+<body>
+<div>
+    <img src="{% static 'images/tt_white_bg.png' %}"/>
+</div>
+<h1>Tech Tracker</h1>
+<p>
+    Invoice no. </br>
+    <span class="secondary">
+        {{ job.id }}
+        {% if job.status == 'C' %}
+        <br/>Due Net 30
+        {% endif %}
+    </span>
+</p>
+<h3>Bill to</h3>
+<p>
+    {{ job.customer.name }}<br>
+    {{ job.customer.street1 }}<br>
+    {% if job.customer.street2 %}
+        {{ job.customer.street2 }}<br>
+    {% endif %}
+    {{ job.customer.city }}, {{ job.customer.state }} {{ job.customer.zip }}
+
+</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Status</th>
+        <th>Level</th>
+        <th>Submitted</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ job.get_status_display }}</td>
+        <td>{{ job.get_level_display }}</td>
+        <td>{{ job.created_at }}</td>
+    </tr>
+    </tbody>
+</table>
+
+
+<h3>Time (billed to nearest 15 minutes)</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Start</th>
+        <th>End</th>
+
+        <th>Technician</th>
+        <th>Rate</th>
+        <th>Comment</th>
+        <th>Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for time in job.jobtime_set.all %}
+        <tr class="row{% cycle "1" "2" %}">
+            <td>{{ time.start }}</td>
+            <td>{{ time.end }}</td>
+            <td>{{ time.technician.user.name }}</td>
+            <td>${{ time.technician.level.payrate|floatformat:2 }}</td>
+            <td>{{ time.comment|default:'' }}</td>
+            <td>{% timeworked time.start time.end %}</td>
+        </tr>
+    {% endfor %}
+    <tr class="total">
+        <td colspan="5">Total</td>
+        <td class="num">${{ job.timeCost|floatformat:2 }}</td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Parts (billed for installed)</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th>Status</th>
+        <th>Cost</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for part in job.jobpart_set.all %}
+            <tr>
+                <td>{{ part.part.name }}</td>
+                <td>{{ part.get_status_display }}</td>
+                <td>
+                    {% if part.status == 'I' %}
+                    ${{ part.cost|floatformat:2 }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+
+    {% endfor %}
+    <tr class="total">
+        <td colspan="2">Total</td>
+        <td class="num">${{ job.partCost|floatformat:2 }}</td>
+    </tr>
+    </tbody>
+</table>
+
+Total Cost: ${{ job.totalCost|floatformat:2 }}
+
+</body>
+</html>

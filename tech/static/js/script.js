@@ -28,6 +28,11 @@ function closeVisibleQuickview() {
     $('[data-dismiss="quickview"]:visible').trigger('click')
 }
 
+function removeMessage(){
+    $('.techmessage').slideUp(350, function(){
+                $(this).remove();
+            })
+}
 jQuery(document).ready(function ($) {
 
     $(document).on('click', '.navbar-burger', function() {
@@ -99,6 +104,16 @@ jQuery(document).ready(function ($) {
         $('#filterform').submit()
     })
 
+    if ( $('.techmessage').length ) {
+        $(document).on('click', '.techmessage .delete', function(){
+            removeMessage()
+        })
+
+        setTimeout(function(){
+            removeMessage()
+        }, 5000)
+    }
+
      flatpickr("#id_appointment", {
                     enableTime: true,
                     minuteIncrement: 15,
@@ -107,5 +122,7 @@ jQuery(document).ready(function ($) {
                     minDate: "today",
                     position: 'above center',
                 });
+
+
 })
 

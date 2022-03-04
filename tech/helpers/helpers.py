@@ -1,6 +1,9 @@
 import datetime
 import logging
 
+from django.shortcuts import redirect
+from django.urls import reverse
+
 '''
 Return a date format string
 '''
@@ -77,18 +80,21 @@ def generateJsonSelections(choices):
 
 
 def roundFifteen(minutes):
-    fullquarters = minutes // 15
-    remainder = minutes % 15
-    if remainder > 7.5:
-        fullquarters += 15
-    if fullquarters == 0:
-        return 15
+    logging.warning(minutes)
+    hours, leftover = divmod(minutes, 60)
+    fullquarters = leftover // 15
 
-    return fullquarters
+    remainder = leftover % 15
+    if remainder > 7.5: #did they work more than 7 1/2 minutes, so charge for the 15 minute block
+        fullquarters += 1
+    hours = hours + (fullquarters / 4 )
+    return hours
 
 
-def selectorBuilder(choices, selected_value, jobid=None, name='', class_name='ttselector', all_option=False, all_text='All'):
-    s = '<select name="'+ name +'" class="select ' + class_name + '" ' + ('data-id="' + str(jobid) + '"' if jobid else '') + '>'
+def selectorBuilder(choices, selected_value, jobid=None, name='', class_name='ttselector', all_option=False,
+                    all_text='All'):
+    s = '<select name="' + name + '" class="select ' + class_name + '" ' + (
+        'data-id="' + str(jobid) + '"' if jobid else '') + '>'
     if all_option:
         s += "<option value=''>{}</option>".format(all_text)
     for choice in choices:
@@ -96,3 +102,15 @@ def selectorBuilder(choices, selected_value, jobid=None, name='', class_name='tt
         s += "<option {} value='{}'>{}</option>".format(selected, choice[0], choice[1])
     s += '</select>'
     return s
+
+
+def getRedirectWithParam(message, location='tech:home'):
+    base_url = reverse(location)
+    url = '{}?msg={}'.format(base_url, message)
+    return redirect(url)
+
+def getMessageText(mIdx):
+    if mIdx == 1:
+        return 'Thank you for submitting your request.  We will review it and get back to you shortly.'
+    if mIdx == 2:
+        return 'Profile Saved.'

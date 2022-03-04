@@ -2,14 +2,13 @@
 {% block title %}Register{% endblock title %}
 
 {% block content %}
-<h2>Sign up as a customer to request support:</h2>
-    <div class="is-size-6 has-text-grey">If you are a tech but don't have an account, contact Tech Tracker support at (402) 555-1234.</div>
+<h2>Profile:</h2>
     <hr />
     <form method="post">
         {% csrf_token %}
         {% include 'blocks/bulma_form.html' with form=form %}
         <div class="control">
-            <button class="button is-link" type="submit">Register</button>
+            <button class="button is-primary" type="submit">Save Profile</button>
         </div>
     </form>
 

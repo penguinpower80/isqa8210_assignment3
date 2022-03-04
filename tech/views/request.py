@@ -1,21 +1,20 @@
 import logging
 
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from tech.forms.newrequest import NewRequestForm
-
+from tech.helpers.helpers import getRedirectWithParam
 
 def request(request):
     context = {}
-    return redirect('/', msg='Thank you for submitting a request. We will review and be in touch shortly.')
-
     form = NewRequestForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             newrequest = form.save(commit=False)
             newrequest.customer = request.user
             newrequest.save()
-            return redirect('tech:home', msg='Thank you for submitting a request. We will review and be in touch shortly.')
+            return getRedirectWithParam(1)
         else:
             return render(request, 'tech/request.html', {'form': form})
     else:
