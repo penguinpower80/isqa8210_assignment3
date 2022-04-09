@@ -15,6 +15,8 @@ import django_heroku
 from decouple import config
 from pathlib import Path
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,7 +45,8 @@ INSTALLED_APPS = [
     'tech.apps.TechConfig',
     'django_seed',
     'django_admin_listfilter_dropdown',
-    'storages'
+    'storages',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -78,6 +81,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'tracker.wsgi.application'
 
 
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = '/'
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -96,11 +102,13 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': BASE_DIR / config('DB_NAME', default='db.sqlite3'),
         },
     }
 
-
+if config('EMAIL', default='LOCAL') == 'LOCAL':
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = 'app-messages'  # change this to a proper location
 
 AUTH_USER_MODEL = 'tech.User'
 
@@ -140,9 +148,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'tech\static')
 
 MEDIA_URL = '/media/'
 
@@ -162,4 +170,5 @@ if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and AWS_STORAGE_BUCKET_NAME:
 else:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-django_heroku.settings(locals())
+if config("HEROKU", default='False') == 'True':
+    django_heroku.settings(locals())

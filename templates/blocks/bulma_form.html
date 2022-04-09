@@ -1,0 +1,52 @@
+{% load widget_tweaks %}
+{% for hidden_field in form.hidden_fields %}
+    {{ hidden_field }}
+{% endfor %}
+
+
+{% if form.errors and field.errors %}
+    <div class="non_field_form_error notification is-danger">
+    <ul>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+    </div>
+{% endif %}
+
+{% if form.non_field_errors %}
+    <div class="non_field_form_error notification is-danger">
+        <button type="button" class="delete"></button>
+        {% for error in form.non_field_errors %}
+            {{ error }}
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+{% for field in form.visible_fields %}
+    <div class="field">
+        <label for="{{ field.id_for_label }}" class="label">{{ field.label }}</label>
+        <div class="control">
+            {% if form.is_bound %}
+                {% if field.errors %}
+                    {% render_field field class="input " %}
+                    {% for error in field.errors %}
+                        <div class="has-text-danger">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    {% render_field field class="input is-valid" %}
+                {% endif %}
+            {% else %}
+                {% render_field field class="input" %}
+            {% endif %}
+        </div>
+        {% if field.help_text %}
+            <small class="form-text has-text-grey">{{ field.help_text }}</small>
+        {% endif %}
+    </div>
+{% endfor %}

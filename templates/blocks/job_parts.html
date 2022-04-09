@@ -1,0 +1,21 @@
+<div class="container">
+    {% include 'blocks/quickview_customer.html' %}
+    {% if not partsCollection %}
+        <div class="columns nopartsmessage">
+            <div class="column">
+                <div class="has-text-centered">
+                    No Parts Found
+                </div>
+            </div>
+        </div>
+        {% include 'blocks/parts_selector.html' with visible=True jobid=jobid %}
+        <div id="jobparts"></div>
+    {% else %}
+        {% include 'blocks/parts_selector.html' with visible=False jobid=jobid %}
+        <div id="jobparts">
+        {% for part in partsCollection %}
+            {% include 'blocks/part_row.html' with part=part.part jobpart=part  %}
+        {% endfor %}
+        </div>
+    {% endif %}
+</div>

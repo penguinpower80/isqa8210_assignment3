@@ -1,0 +1,114 @@
+html, body {
+    height: 100%
+}
+
+.skiptocontent {
+    padding: 8px;
+    position: absolute;
+    transform: translateY(-100%);
+    transition: transform 0.3s;
+}
+
+.skiptocontent:focus {
+    transform: translateY(0%);
+}
+
+img.desktop-logo {
+    width: 150px;
+}
+
+.add_part_holder {
+    max-height: 50%;
+    overflow: auto;
+}
+
+.quickview-block {
+    overflow:hidden;
+}
+
+.navbar {
+    background-image:none;
+    border:none;
+}
+
+.jobcard.level_l, .jobcard.level_l .box {
+
+}
+
+.jobcard.level_n, .jobcard.level_n .box {
+    background-color: rgba(225, 255, 192, 0.39);
+}
+
+.jobcard.level_c, .jobcard.level_c .box {
+    background-color: rgba(255, 229, 231, 0.39);
+}
+
+.statusflag {
+    position: absolute;
+    right: 0;
+    border: 1px solid black;
+    border-right: none;
+    padding: 2px 10px 2px 7px;
+    text-align: left;
+    margin-top: -15px;
+}
+
+@media screen and (max-width: 1023px) {
+    .statusflag {
+        position: relative;
+        text-align: center;
+    }
+
+    .iscustomerappt {
+        width:100%;
+        margin-top:10px;
+    }
+}
+
+.jobcard.status_n .statusflag {
+    background-color: blue;
+    border-color:blue;
+    color: white;
+}
+
+.jobcard.status_o .statusflag {
+    background-color: green;
+    border-color:green;
+    color: white;
+}
+
+.jobcard.status_x {
+    opacity: 0.65;
+}
+
+.jobcard.status_x .statusflag{
+    background-color: black;
+    color: white;
+
+}
+.jobcard.status_h .statusflag, .jobcard.status_w .statusflag {
+    background-color: orange;
+    color:white;
+    border-color:orangered;
+}
+
+.jobcard.status_c .statusflag {
+    background-color: purple;
+    color:white;
+    border-color:mediumpurple;
+}
+
+.technician .statusflag, .technician .levelflag, .technician .partstatusflag, .technician .iscustomerappt {
+    cursor: pointer;
+}
+
+.swal2-styled.button {
+    padding-bottom: calc(0.5em - 1px);
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: calc(0.5em - 1px);
+}
+
+#id_description {
+    height: 100px;
+}

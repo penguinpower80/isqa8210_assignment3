@@ -1,0 +1,94 @@
+{% load techtags %}
+<div id="job_{{ job.id }}" class="jobcard card block status_{{ job.status.lower }} level_{{ job.level.lower }}">
+    <header class="card-header has-background-link has-text-white">
+        <div class="column">
+            <p class="card-header-title has-text-white">
+                {% if user.is_customer %}
+                    <span class="is-hidden-touch">Request #{{ job.id }}, made on {{ job.created_at }}</span>
+                {% else %}
+                    {{ job.customer.name }} ({{ job.customer.username }})
+                {% endif %}
+            </p>
+        </div>
+        <div class="column has-text-right">
+            <p class="has-text-right" title="{{ job.created_at }}">
+                <span class="is-hidden-touch">Submitted </span>
+                {% jobage job.created_at %}
+            </p>
+        </div>
+    </header>
+    <div class="card-content">
+        <div class="statusflag" data-jobid="{{ job.id }}" data-value="{{ job.status }}">
+            {{ job.get_status_display }}
+        </div>
+        <div class="content">
+            {% appt job.appointment job.id %}
+        </div>
+        <div class="content">
+            {{ job.description }}
+            <div class="box">
+                <div class="columns">
+                    <div class="column has-text-centered">
+                        <button class="button is-info is-fullwidth" data-show="quickview" data-target="quickviewParts"
+                                data-type="parts" data-jobid="{{ job.id }}">
+                        <span class="icon">
+                        <i class="fas fa-laptop-medical"></i>
+                            </span>
+                            <span>
+                        Parts
+                        </span>
+                        </button>
+                    </div>
+                    <div class="column has-text-centered">
+                        <button class="button is-primary is-fullwidth" data-show="quickview" data-target="quickviewTime"
+                                data-type='times' data-jobid="{{ job.id }}">
+                            <span class="icon">
+                        <i class="fas fa-stopwatch"></i>
+                            </span>
+                            <span>
+                        Time
+                            </span>
+                        </button>
+                    </div>
+                    <div class="column has-text-centered">
+                        {% if user.is_tech %}
+                            {% jobtimebutton job %}
+                        {% else %}
+                                <p class="control">
+                                    <a target="_blank" class="button is-success is-fullwidth" href="{% url 'tech:htmlinvoice' job.id %}">
+                                      <span class="icon is-small">
+                                        <i class="fas fa-file"></i>
+                                      </span>
+                                        <span>Invoice</span>
+                                    </a>
+                                </p>
+                                <p class="control">
+                                    <a target="_blank" class="button is-success is-outlined is-fullwidth" href="{% url 'tech:pdfinvoice' job.id %}">
+                                        <span>Download</span>
+                                        <span class="is-hidden-touch">(PDF)</span>
+                                        <span class="icon is-small">
+                                        <i class="fas fa-file-pdf"></i>
+                                      </span>
+                                    </a>
+                                </p>
+
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <div class="card-footer-item levelflag" data-jobid="{{ job.id }}" data-value="{{ job.level }}">
+            {{ job.get_level_display }}
+        </div>
+        <div class="card-footer-item jobcost">
+            ${{ job.totalCost|floatformat:2 }}
+        </div>
+        <div class="card-footer-item">
+            <span class="is-hidden-touch">
+            Assigned to:
+            </span>{{ job.technician.user.name }}
+        </div>
+    </footer>
+</div>

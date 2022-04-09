@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Log In{% endblock %}
+{% block content %}
+
+
+    <h2>Log In</h2>
+    <form method="post">
+        {% csrf_token %}
+
+        {% include 'blocks/bulma_form.html' with form=form %}
+        <div class="control">
+            <button class="button is-link" type="submit">Log In</button>
+        </div>
+    </form>
+{% endblock %}

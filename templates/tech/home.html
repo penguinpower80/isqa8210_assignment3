@@ -1,1 +1,10 @@
-<h1>Coming Soon!</h1>
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}
+        {% include 'blocks/frontpage.html' %}
+    {% else %}
+        <h1>Tech Tracker</h1>
+        {% include 'blocks/must_login.html' %}
+    {% endif %}
+{% endblock %}

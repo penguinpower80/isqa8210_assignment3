@@ -1,0 +1,40 @@
+{% load techtags %}
+<form id="filterform" class="mb-3">
+    <div class="columns">
+        <div class="column is-one-quarter">
+            <div class="field">
+                <p class="control is-expanded has-icons-left">
+                    <span class="select is-fullwidth">
+                        {% status_picker status=request.GET.status classsuffix='filter' alloption=True %}
+                    </span>
+                    <span class="icon is-small is-left">
+                            <i class="fas fa-filter"></i>
+                        </span>
+                </p>
+            </div>
+        </div>
+        <div class="column is-one-quarter">
+            <div class="field">
+                <p class="control is-expanded has-icons-left">
+                    <span class="select is-fullwidth">
+                        {% level_picker level=request.GET.level classsuffix='filter' alloption=True %}
+                    </span>
+                    <span class="icon is-small is-left">
+                            <i class="fas fa-caret-down"></i>
+                        </span>
+                </p>
+            </div>
+        </div>
+        <div class="column is-half">
+            <div class="field has-addons">
+                <div class="control is-expanded">
+                    <input name="phrase" value="{{ search_phrase|default_if_none:"" }}" class="input jobsearch" type="text" placeholder="Find a ticket">
+                </div>
+                <div class="control">
+                    <button class="button is-info">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
