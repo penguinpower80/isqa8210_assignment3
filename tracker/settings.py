@@ -30,7 +30,7 @@ SECRET_KEY = config('SECRET_KEY', default='---')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['techtracker.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1','techtracker.herokuapp.com']
 
 
 # Application definition

@@ -112,3 +112,18 @@ img.desktop-logo {
 #id_description {
     height: 100px;
 }
+
+.swal2-radio {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
+
+.technician .swal2-radio label {
+    width: 100%;
+    border: 1px solid grey;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
