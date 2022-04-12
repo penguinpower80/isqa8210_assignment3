@@ -37,7 +37,7 @@ async function selectorPopup(title, choices, value, callback) {
     const {value: choice} = await Swal.fire({
         customClass: buttonClass,
         title: 'Select Job Status',
-        input: 'select',
+        input: 'radio',
         inputValue: value,
         inputOptions: choices,
         inputPlaceholder: 'Select a ' + title.toLowerCase(),
