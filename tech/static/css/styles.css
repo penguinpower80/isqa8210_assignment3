@@ -20,6 +20,7 @@ img.desktop-logo {
 .add_part_holder {
     max-height: 50%;
     overflow: auto;
+    background-color: #dbf1d6;
 }
 
 .quickview-block {
