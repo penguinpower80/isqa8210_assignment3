@@ -295,25 +295,43 @@ jQuery(document).ready(function ($) {
     $(document).on('click', '.iscustomerappt', function (e) {
         let appt = $(this).data('appt');
         let jobid = $(this).data('jobid');
-        console.log(appt)
+
         Swal.fire({
             title: '<strong>Set Appointment</strong>',
-            html: '<input class="input" id="datetimepicker" value="'+appt+'">',
-            customClass: buttonClass,
+            html: '<div id="pickermessage" class="">Selected date and time:</div><input class="input" id="datetimepicker" value="" />',
+            customClass: {...buttonClass, htmlContainer: 'datepickerpopuphtml'},
             showCloseButton: true,
             showCancelButton: true,
             focusConfirm: false,
+            heightAuto: false,
             willOpen: function () {
+                let originalTime = appt
                 flatpickr("#datetimepicker", {
                     enableTime: true,
                     minuteIncrement: 15,
                     altInput: true,
                     altFormat: "F j, Y h:i K",
-                    minDate: "today",
+                    // minDate: "today",
                     inline: true,
                     position: 'auto center',
-                    static: true
+                    static: true,
+                    defaultDate: appt,
+                    onChange: function(selectedDates, dateStr, instance) {
+                        // prevent setting an appointment in the past, but can't use min date b/c it won't show in the input
+                        $('#pickermessage').text('Selected date and time:').removeClass('has-text-danger')
+
+                        if ( selectedDates[0] < instance.now )
+                        {
+                            instance.setDate(appt)
+                            $('#pickermessage').text('New appointment cannot be in the past!').addClass('has-text-danger')
+                        }
+
+
+
+                    }
                 });
+
+
             },
             confirmButtonText: 'Set Appointment',
             cancelButtonText: 'Cancel',

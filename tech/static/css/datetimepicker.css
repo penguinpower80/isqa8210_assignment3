@@ -17,6 +17,8 @@
   line-height: 1em;
 }
 
+
+
 .daterangepicker:before, .daterangepicker:after {
   position: absolute;
   display: inline-block;

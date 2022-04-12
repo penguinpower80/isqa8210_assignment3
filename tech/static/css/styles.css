@@ -112,3 +112,13 @@ img.desktop-logo {
 #id_description {
     height: 100px;
 }
+
+.datepickerpopuphtml {
+  min-height: 420px;
+}
+
+.datepickerpopuphtml input {
+    border: none;
+    font-weight: bold;
+    text-align: center;
+}
