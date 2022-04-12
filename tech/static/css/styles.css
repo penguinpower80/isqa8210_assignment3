@@ -113,6 +113,16 @@ img.desktop-logo {
     height: 100px;
 }
 
+
+.datepickerpopuphtml {
+  min-height: 420px;
+}
+
+.datepickerpopuphtml input {
+    border: none;
+    font-weight: bold;
+    text-align: center;
+
 .swal2-radio {
     display: flex;
     align-items: flex-start;
