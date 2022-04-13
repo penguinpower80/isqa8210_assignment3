@@ -26,5 +26,5 @@ def pdf(request, jobid):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'filename=job_{job.id}.pdf'
     weasyprint.HTML(string=html).write_pdf(response,
-                                           stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + '\\css\\pdf.css')])
+                                           stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + '/css/pdf.css')])
     return response
