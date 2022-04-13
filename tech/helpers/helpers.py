@@ -80,7 +80,6 @@ def generateJsonSelections(choices):
 
 
 def roundFifteen(minutes):
-    logging.warning(minutes)
     hours, leftover = divmod(minutes, 60)
     fullquarters = leftover // 15
 

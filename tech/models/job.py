@@ -71,7 +71,6 @@ class Job(models.Model):
                 seconds = time_per_user[t]['seconds']
                 minutes = time_per_user[t]['seconds'] / 60  # minutes
                 hours = roundFifteen(minutes)
-                logging.warning(hours)
                 totalcost += hours * time_per_user[t]['tech'].level.payrate
 
         return totalcost

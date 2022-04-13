@@ -128,7 +128,6 @@ def starttime(request, jobid):
     # if they push start, and a job is already running, just return an "ok"
     jobtime = JobTime.objects.filter(end__isnull=True).count()
     if jobtime > 0:
-        logging.warning('Job already started')
         return HttpResponse(status=200)
     tz = pytz.timezone(settings.TIME_ZONE)
     tech = Technician.objects.get(pk=request.user.id)
@@ -154,7 +153,6 @@ def stoptime(request, jobid):
     jobtimeCollection = JobTime.objects.filter(end__isnull=True)[:1]
 
     if jobtimeCollection.count() == 0:
-        logging.warning('NO job already started')
         return HttpResponse(status=200, content="No job started")
 
     jobtime = jobtimeCollection[0]
