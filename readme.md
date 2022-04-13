@@ -29,7 +29,7 @@ This project will be a technical support dispatch and logging system.  Users wil
     - AWS_STORAGE_BUCKET_NAME
       - The AWS S3 bucket name
     - HEROKU
-      - Is this system running in a Heroku environment.
+      - If this system running in a Heroku environment, set to 'True'
       - Mostly prepares the settings file for including Heroku specific items.
 
   - If use S3, you can follow these steps to setup the AWS Bucket:
