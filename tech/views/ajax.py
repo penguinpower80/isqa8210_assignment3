@@ -8,15 +8,16 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.dateparse import parse_datetime
 
-from tech.helpers.helpers import canAccess
-from tech.models import JobPart, Job, Part, PartLocation, JobTime, Technician
+from tech.helpers.helpers import canAccess, send_invoice
+from tech.models import JobPart, Job, Part, PartLocation, JobTime, Technician, JobStatus
 
-'''
-List a parts from a job
-'''
+
 
 
 def jobparts(request, jobid):
+    """
+    List a parts from a job
+    """
     job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
         return HttpResponse(status=401)
@@ -27,12 +28,13 @@ def jobparts(request, jobid):
     })
 
 
-'''
-Add a part from a job
-'''
+
 
 
 def addpart(request, jobid, partid):
+    """
+    Add a part from a job
+    """
     job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
         return HttpResponse(status=401)
@@ -56,12 +58,13 @@ def addpart(request, jobid, partid):
     })
 
 
-'''
-Remove a part from a job
-'''
+
 
 
 def removepart(request, jobid, jobpartid):
+    """
+    Remove a part from a job
+    """
     job = get_object_or_404(Job, pk=jobid)
     jobpart = get_object_or_404(JobPart, pk=jobpartid)
     if not canAccess(request.user, job):
@@ -71,12 +74,13 @@ def removepart(request, jobid, jobpartid):
     return HttpResponse(status=200)
 
 
-'''
-Update a job part element
-'''
+
 
 
 def updatejobpart(request, jobid, jobpartid):
+    """
+    Update a job part element
+    """
     job = get_object_or_404(Job, pk=jobid)
     jobpart = get_object_or_404(JobPart, pk=jobpartid)
     if not canAccess(request.user, job):
@@ -98,12 +102,13 @@ def updatejobpart(request, jobid, jobpartid):
     })
 
 
-'''
-Return a list of times for this job
-'''
+
 
 
 def jobtimes(request, jobid):
+    """
+    Return a list of times for this job
+    """
     job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
         return HttpResponse(status=401)
@@ -115,12 +120,13 @@ def jobtimes(request, jobid):
     })
 
 
-'''
-Add an start stamp to the record
-'''
+
 
 
 def starttime(request, jobid):
+    """
+    Add an start stamp to the record
+    """
     job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
         return HttpResponse(status=401)
@@ -139,12 +145,13 @@ def starttime(request, jobid):
     return HttpResponse(status=200)
 
 
-'''
-Add an end stamp to the record
-'''
+
 
 
 def stoptime(request, jobid):
+    """
+    Add an end stamp to the record
+    """
     job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
         return HttpResponse(status=401)
@@ -163,12 +170,13 @@ def stoptime(request, jobid):
     return HttpResponse(status=200)
 
 
-'''
-Add an end stamp to the record
-'''
+
 
 
 def removetime(request, jobid, timeid):
+    """
+    Add an end stamp to the record
+    """
     job = get_object_or_404(Job, pk=jobid)
     time = get_object_or_404(JobTime, pk=timeid)
     if not canAccess(request.user, job):
@@ -179,12 +187,12 @@ def removetime(request, jobid, timeid):
     return HttpResponse(status=200)
 
 
-'''
-Add comment to a time record
-'''
 
 
 def addtimecomment(request, jobid, timeid):
+    """
+    Add comment to a time record
+    """
     job = get_object_or_404(Job, pk=jobid)
     time = get_object_or_404(JobTime, pk=timeid)
     if not canAccess(request.user, job):
@@ -196,12 +204,12 @@ def addtimecomment(request, jobid, timeid):
     return HttpResponse(status=200)
 
 
-'''
-Updates various elements of the job
-'''
-
 
 def updatejob(request, jobid):
+    """
+    Updates various elements of the job. Updates the posted "element" with the posted "value".
+    If the job is updated to be complete, then an invoice is automatically sent to the customer.
+    """
     job = get_object_or_404(Job, pk=jobid)
     if not canAccess(request.user, job):
         return HttpResponse(status=401)
@@ -212,6 +220,8 @@ def updatejob(request, jobid):
     if element and value:
         if element == 'status':
             job.status = value
+            if value == JobStatus.COMPLETE:
+                send_invoice(job)
         if element == 'level':
             job.level = value
         if element == 'appointment':

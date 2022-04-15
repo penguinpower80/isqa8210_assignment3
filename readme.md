@@ -28,6 +28,20 @@ This project will be a technical support dispatch and logging system.  Users wil
       - The access key secret for your AWS S3 bucket
     - AWS_STORAGE_BUCKET_NAME
       - The AWS S3 bucket name
+    - EMAIL
+      - Set to 'LOCAL' for local storage in a directory
+      - Set to 'SENDGRID' to use SENDGRID
+    - EMAIL_HOST_PASSWORD
+      - If using SENDGRID, the password (API Key)
+      - https://app.sendgrid.com/settings/api_keys
+    - EMAIL_HOST_USER
+      - If using SENDGRID, the username (defaults to 'apikey')
+    - FROM
+      - Default FROM email address for SENDGRID
+    - \#FORCED_INVOICE_EMAIL
+      - If you are testing, then remove the # and set a valid email.
+      - All invoice emails will be force sent to that email address, overwriting customer email address
+      - Will also overwrite the email if using the CLI option
     - HEROKU
       - If this system running in a Heroku environment, set to 'True'
       - Mostly prepares the settings file for including Heroku specific items.
@@ -61,6 +75,12 @@ This project will be a technical support dispatch and logging system.  Users wil
 ### Run Server
 - After running either the initial setup or other setup routines run:
   - `python manage.py runserver`
+  
+### Send Invoice from CLI
+- An invoice will be sent when a job is set to complete, but you can send from the command line by running:
+  - `python manage.py sendinvoice <jobid> [email]`
+    - `jobid` must be a valid job ID integer
+    - `email` lets you optionally overwrite the customer email.  If `FORCED_INVOICE_EMAIL` is set in environment, then this will not take effect.
 
 ## Styling
 - Bulma.io

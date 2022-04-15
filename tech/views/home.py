@@ -3,7 +3,6 @@ import logging
 from django.db.models import Q
 from django.shortcuts import render
 
-# Create your views here.
 from tech.helpers.helpers import getMessageText
 from tech.models import Job, JobStatus
 
@@ -17,6 +16,7 @@ def home(request):
         msg = getMessageText( int(request.GET.get('msg')) )
     else:
         msg = ''
+
     phrase_filter = None
 
     if request.user.is_tech():
