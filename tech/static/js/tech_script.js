@@ -36,7 +36,7 @@ async function timeMessage(jobid, timeid) {
 async function selectorPopup(title, choices, value, callback) {
     const {value: choice} = await Swal.fire({
         customClass: buttonClass,
-        title: 'Select Job Status',
+        title: 'Select ' + title,
         input: 'radio',
         inputValue: value,
         inputOptions: choices,
